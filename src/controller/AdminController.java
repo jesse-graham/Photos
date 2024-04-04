@@ -21,33 +21,43 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Admin;
 import model.User;
+
+import javax.swing.*;
+
 public class AdminController {
 
-    @FXML TextField userName;
+    @FXML
+    TextField userName;
     /**
      * Search Button - Button on the Pane that searches the users.
      */
-    @FXML Button searchButton;
+    @FXML
+    Button searchButton;
     /**
      * Create Button - Button on the Pane that opens the create Dialog Box when Clicked.
      */
-    @FXML Button createButton;
+    @FXML
+    Button createButton;
     /**
      * Delete Button - Button on the Pane that opens the delete Dialog Box when Clicked.
      */
-    @FXML Button deleteButton;
+    @FXML
+    Button deleteButton;
     /**
      * Logout - Button on the Pane that logs user out
      */
-    @FXML Button logoutButton;
+    @FXML
+    Button logoutButton;
     /***
      * Tilepane - The pane where all the buttons and albums lie on.
      */
-    @FXML TilePane tilePane;
+    @FXML
+    TilePane tilePane;
     /***
      * Scrollpane - Scrolling Pane.
      */
-    @FXML ScrollPane scrollPane;
+    @FXML
+    ScrollPane scrollPane;
     /**
      * Admin  - Admin Object
      */
@@ -77,6 +87,7 @@ public class AdminController {
      * isSelected  - Tells you what is selected.
      */
     public static Boolean isSelected = false;
+
     public void start(Stage primaryStage, ArrayList<User> user, Scene prev, LoginController lpg, Admin admin) {
         this.primaryStage = primaryStage;
         AdminController.users = user;
@@ -85,14 +96,37 @@ public class AdminController {
         selected = null;
         isSelected = false;
         this.admin = admin;
-        for(int i = 0; i < users.size(); i++){
-            users.get(i).setUserImage();
-        }
-        for(int i = 0; i < users.size(); i++){
-            tilePane.getChildren().add(users.get(i).getLabel());
-        }
+//        for(int i = 0; i < users.size(); i++){
+//            users.get(i).setUserImage();
+//        }
+//        for(int i = 0; i < users.size(); i++){
+//            tilePane.getChildren().add(users.get(i).getLabel());
+//        }
         primaryStage.setResizable(true);
+    }
 
+    public void handleLogout(ActionEvent e) {
 
     }
+
+    public void handleAddButton(ActionEvent e) {
+
+    }
+
+    public void handleDeleteUserButton(ActionEvent actionEvent) {
+
+    }
+
+    public void handleListUsersButton(ActionEvent actionEvent) {
+
+    }
+
+    public void handleConfirmButton(ActionEvent actionEvent) {
+
+    }
+
+    public void handleCancelButton(ActionEvent actionEvent) {
+
+    }
+
 }

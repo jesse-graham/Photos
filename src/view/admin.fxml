@@ -9,13 +9,13 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
     <children>
-        <ListView fx:id="users" layoutX="13.0" layoutY="132.0" prefHeight="154.0" prefWidth="374.0" />
+        <ListView fx:id="userList" layoutX="13.0" layoutY="132.0" prefHeight="154.0" prefWidth="374.0" />
         <Label layoutX="14.0" layoutY="14.0" text="Admin Dashboard">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <Button fx:id="logOutButton" onAction="#handleLogoutButton" layoutX="329.0" layoutY="15.0" mnemonicParsing="false" text="Log out" />
+        <Button fx:id="logOutButton" onAction="#handleLogout" layoutX="329.0" layoutY="15.0" mnemonicParsing="false" text="Log out" />
         <Label layoutX="14.0" layoutY="54.0" text="Username:">
             <font>
                 <Font name="System Bold" size="12.0" />

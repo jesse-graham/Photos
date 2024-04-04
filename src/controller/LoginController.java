@@ -77,7 +77,7 @@ public class LoginController {
     public void adminLogin() {
         try{
             FXMLLoader loader= new FXMLLoader();
-            loader.setLocation(getClass().getResource("/view/adminPane.fxml"));
+            loader.setLocation(getClass().getResource("/view/admin.fxml"));
             AnchorPane root = (AnchorPane)loader.load();
             AdminController apg = loader.getController();
             apg.start(primaryStage,users, loginScene,this, admin);
@@ -105,7 +105,7 @@ public class LoginController {
             AnchorPane root = (AnchorPane)loader.load();
             AdminController apg = loader.getController();
 
-            apg.start(primaryStage,users, loginScene,this, name, album, user, index, admin);
+            apg.start(primaryStage,users, loginScene,this, admin);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             root.requestFocus();
