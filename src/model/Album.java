@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.io.File;
 
 public class Album implements Serializable{
     String albumName;
@@ -52,7 +53,36 @@ public class Album implements Serializable{
         }
     }
 
+    public boolean addPhoto(File file){
+        if(photos.isEmpty()){
+            photos.add(new Photo(file, this));
+            updateOldestandNewest();
+            return true;
+        } else {
+            for(Photo i : photos){
+                if(i.getPath().equals(file.getPath())){
+                    return false;
+                }
+            }
+            photos.add(new Photo(file, this));
+            updateOldestandNewest();
+            return true;
+        }
+    }
+
     public ArrayList<Photo> getPhotos(){
         return photos;
+    }
+
+    @Override
+    public String toString() {
+        String name = STR."\{albumName}     \{numPhotos} photos\n";
+
+        if(photos.isEmpty()){
+            return name;
+        } else {
+            String date = STR."\{new SimpleDateFormat("MM/dd/yyyy").format(oldest.getTime())} - \{new SimpleDateFormat("MM/dd/yyyy").format(newest.getTime())}";
+            return name + date;
+        }
     }
 }

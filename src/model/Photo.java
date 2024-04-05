@@ -18,6 +18,7 @@ public class Photo implements Serializable{
 
     public Photo(File file, Album album){
         caption = "";
+        photoPath = file.getPath();
         tags = new ArrayList<>();
         date = Calendar.getInstance();
         date.setTimeInMillis(file.lastModified());

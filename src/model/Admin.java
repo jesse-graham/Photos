@@ -43,6 +43,15 @@ public class Admin implements Serializable{
         return false;
     }
 
+    public User getUser(String userName){
+        for(User i : users){
+            if (i.getUserName().equals(userName)){
+                return i;
+            }
+        }
+        return null;
+    }
+
     public static void writeAdmin(Admin admin) throws IOException{
         ObjectOutputStream oos = new ObjectOutputStream(
                 new FileOutputStream(storeDir+File.separator+storeFile));
@@ -50,13 +59,6 @@ public class Admin implements Serializable{
         oos.close();
     }
 
-    /**
-     * Read admin.
-     *
-     * @return the admin and all the stuff from userData.dat
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws ClassNotFoundException the class not found exception
-     */
     public static Admin readAdmin() throws IOException, ClassNotFoundException{
         File file = new File("Data/data.dat");
         if(!file.exists()){

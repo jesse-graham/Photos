@@ -28,29 +28,10 @@ public class AdminController {
 
     @FXML
     TextField userName;
-    /**
-     * Search Button - Button on the Pane that searches the users.
-     */
+
     @FXML
-    Button searchButton;
-    /**
-     * Create Button - Button on the Pane that opens the create Dialog Box when Clicked.
-     */
-    @FXML
-    Button createButton;
-    /**
-     * Delete Button - Button on the Pane that opens the delete Dialog Box when Clicked.
-     */
-    @FXML
-    Button deleteButton;
-    /**
-     * Logout - Button on the Pane that logs user out
-     */
-    @FXML
-    Button logoutButton;
-    /***
-     * Tilepane - The pane where all the buttons and albums lie on.
-     */
+    Button searchButton, createButton, deleteButton, logoutButton;
+
     @FXML
     TilePane tilePane;
     /***

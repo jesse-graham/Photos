@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import controller.LoginController;
@@ -30,9 +31,24 @@ public class PhotoAlbumApplication extends Application {
         }
         catch(Exception e){
             admin = new Admin();
+            User stock = new User("stock");
+            Album stockAlbum = new Album("stock");
+            addStockPhotos(stockAlbum);
+            stock.addAlbum(stockAlbum);
+            admin.users.add(stock);
+            admin.users.add(new User("testUser"));
         }
 
     }
+
+    public void addStockPhotos(Album album){
+        album.addPhoto(new File("Data/StockPhotos/caspar-camille-rubin-89xuP-XmyrA-unsplash.jpg"));
+        album.addPhoto(new File("Data/StockPhotos/muhammad-awan-Jwby0ysbCV4-unsplash.jpg"));
+        album.addPhoto(new File("Data/StockPhotos/rafay-ansari-4dzcgZxGYQA-unsplash.jpg"));
+        album.addPhoto(new File("Data/StockPhotos/sujith-r-xWw4BJmfB5Y-unsplash.jpg"));
+        album.addPhoto(new File("Data/StockPhotos/tim-schmidbauer-TE_lOmkKq04-unsplash.jpg"));
+    }
+
     public void start(Stage mainStage) {
         try {
             if(admin.users == null){
@@ -56,12 +72,6 @@ public class PhotoAlbumApplication extends Application {
         }
     }
 
-    /**
-     * main method
-     *
-     * @param args
-     *            command-line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }

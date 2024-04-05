@@ -39,15 +39,14 @@ public class LoginController {
     }
 
     public void login(ActionEvent e) {
-       // loginScene = primaryStage.getScene();
+       loginScene = primaryStage.getScene();
         String s = UserNameField.getText().trim().toLowerCase();
         String admin = "admin";
         if(s.equalsIgnoreCase(admin)){
             UserNameField.clear();
             adminLogin();
-        }
-        else{
-            Boolean found = false;
+        } else{
+            boolean found = false;
             for(int i = 0; i < users.size(); i++){
                 if(users.get(i).userName.equalsIgnoreCase(s)){
                     UserNameField.clear();
@@ -57,23 +56,19 @@ public class LoginController {
                 }
             }
 
-            if(found == false){
+            if(!found){
                 Alert message = new Alert(AlertType.INFORMATION);
                 message.initOwner(primaryStage);
                 message.setTitle("Login Error");
                 message.setHeaderText("Cannot Login");
-                message.setContentText("Username is incorrect.");
+                message.setContentText("Username is incorrect, enter a valid username.");
                 message.setGraphic(null);
                 message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
             }
         }
-
     }
 
-    /**
-     * Admin login.
-     */
     public void adminLogin() {
         try{
             FXMLLoader loader= new FXMLLoader();
@@ -90,22 +85,14 @@ public class LoginController {
         }
     }
 
-    /**
-     * User login.
-     *
-     * @param name username
-     * @param album album list
-     * @param user the current user obj
-     * @param index the index of the user.
-     */
     public void userLogin(String name, ArrayList<Album> album, User user, int index){
         try{
             FXMLLoader loader= new FXMLLoader();
-            loader.setLocation(getClass().getResource("/view/albumPane.fxml"));
+            loader.setLocation(getClass().getResource("/view/user.fxml"));
             AnchorPane root = (AnchorPane)loader.load();
-            AdminController apg = loader.getController();
+            UserController apg = loader.getController();
 
-            apg.start(primaryStage,users, loginScene,this, admin);
+            apg.start(primaryStage,users, loginScene,this, admin, user);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             root.requestFocus();
