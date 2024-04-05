@@ -7,25 +7,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
     <children>
-        <ListView fx:id="userList" layoutX="13.0" layoutY="132.0" prefHeight="154.0" prefWidth="374.0" />
+        <ListView fx:id="users" layoutX="162.0" layoutY="136.0" prefHeight="245.0" prefWidth="269.0" />
         <Label layoutX="14.0" layoutY="14.0" text="Admin Dashboard">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <Button fx:id="logOutButton" onAction="#handleLogout" layoutX="329.0" layoutY="15.0" mnemonicParsing="false" text="Log out" />
+        <Button fx:id="logOutButton" layoutX="519.0" layoutY="401.0" mnemonicParsing="false" onAction="#handleLogoutButton" text="Sign Out" />
         <Label layoutX="14.0" layoutY="54.0" text="Username:">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
         <TextField fx:id="userField" layoutX="86.0" layoutY="50.0" prefHeight="25.0" prefWidth="167.0" />
-        <Button fx:id="createUserButton" onAction="#handleAddButton" layoutX="14.0" layoutY="90.0" mnemonicParsing="false" text="Create user" />
-        <Button fx:id="deleteUserButton" onAction="#handleDeleteUserButton" layoutX="162.0" layoutY="90.0" mnemonicParsing="false" text="Delete user" />
-        <Button fx:id="listUsersButton" onAction="#handleListUsersButton" layoutX="321.0" layoutY="90.0" mnemonicParsing="false" text="List users" />
-        <Button fx:id="confirmButton" onAction="#handleConfirmButton" layoutX="262.0" layoutY="50.0" mnemonicParsing="false" text="Confirm" />
-        <Button fx:id="cancelButton" onAction="#handleCancelButton" layoutX="332.0" layoutY="50.0" mnemonicParsing="false" text="Cancel" />
+        <Button fx:id="createUserButton" layoutX="29.0" layoutY="136.0" mnemonicParsing="false" onAction="#handleAddButton" text="Create user" />
+        <Button fx:id="deleteUserButton" layoutX="29.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleDeleteUserButton" text="Delete user" />
+        <Button fx:id="listUsersButton" layoutX="29.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleListUsersButton" prefHeight="25.0" prefWidth="80.0" text="List users" />
+        <Button fx:id="confirmButton" layoutX="262.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleConfirmButton" text="Submit" />
+        <Button fx:id="cancelButton" layoutX="524.0" layoutY="369.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Back" />
     </children>
 </AnchorPane>
