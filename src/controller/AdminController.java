@@ -24,7 +24,8 @@ import model.User;
 
 import javax.swing.*;
 
-public class AdminController {
+public class AdminController{
+
 
     @FXML
     TextField userName;
@@ -86,26 +87,60 @@ public class AdminController {
         primaryStage.setResizable(true);
     }
 
-    public void handleLogout(ActionEvent e) {
-
+    @FXML
+    public void handleLogoutButton(ActionEvent e) throws IOException {
+        primaryStage.setScene(prev); // Go back to the previous scene
     }
 
+    @FXML
     public void handleAddButton(ActionEvent e) {
-
+        String username = userName.getText();
+        if (username.isEmpty()) {
+            showAlert("Error", "User creation error", "Username cannot be empty.");
+            return;
+        }
+        if (admin.addUser(username)) {
+            try {
+                Admin.writeAdmin(admin); // Persist changes
+                updateUsersDisplay(); // Update UI
+            } catch (IOException ioException) {
+                showAlert("Error", "Persistence Error", "Could not save the admin data.");
+            }
+        } else {
+            showAlert("Error", "User Creation Error", "A user with this name already exists.");
+        }
     }
 
+    @FXML
     public void handleDeleteUserButton(ActionEvent actionEvent) {
+        String username = userName.getText();
+        if (admin.removeUser(username)) {
+            try {
+                Admin.writeAdmin(admin); // Persist changes
+                updateUsersDisplay(); // Update UI
+            } catch (IOException ioException) {
+                showAlert("Error", "Persistence Error", "Could not save the admin data.");
+            }
+        } else {
+            showAlert("Error", "User Deletion Error", "User not found.");
+        }
+    }
+
 
     }
 
+    @FXML
     public void handleListUsersButton(ActionEvent actionEvent) {
+    updateUsersDisplay();
 
     }
 
+    @FXML
     public void handleConfirmButton(ActionEvent actionEvent) {
 
     }
 
+    @FXML
     public void handleCancelButton(ActionEvent actionEvent) {
 
     }
