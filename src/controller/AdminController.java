@@ -14,6 +14,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
@@ -88,12 +89,8 @@ public class AdminController{
         selected = null;
         isSelected = false;
         this.admin = admin;
-//        for(int i = 0; i < users.size(); i++){
-//            users.get(i).setUserImage();
-//        }
-//        for(int i = 0; i < users.size(); i++){
-//            tilePane.getChildren().add(users.get(i).getLabel());
-//        }
+        userList.setItems(FXCollections.observableArrayList(users));
+        userList.getSelectionModel().select(0);
         primaryStage.setResizable(true);
     }
 
@@ -108,41 +105,88 @@ public class AdminController{
 
     @FXML
     public void handleAddButton(ActionEvent e) {
-        String username = userField.getText().trim();
+        // Create a new stage for the input window
+        Stage inputStage = new Stage();
 
-        if (username.isEmpty()) {
-            showError("Username cannot be empty.");
-            return;
-        }
+        // Create a text field for user input
+        TextField inputTextField = new TextField();
+        inputTextField.setPromptText("New User");
 
-        try {
-            Admin admin = Admin.readAdmin(); // Load the admin object
-
-            if (admin.addUser(username)) {
-                Admin.writeAdmin(admin); // Save the updated admin object
-                showMessage("User added successfully.");
-            } else {
-                showError("Username is already used.");
+        // Create a button to submit the input
+        Button submitButton = new Button("Create");
+        submitButton.setOnAction(a -> {
+            String userInput = inputTextField.getText();
+            if(userInput.trim().equals("")){
+                Alert message = new Alert(AlertType.INFORMATION);
+                message.initOwner(primaryStage);
+                message.setTitle("User Creation Error");
+                message.setHeaderText("Invalid Username");
+                message.setContentText("Enter a username.");
+                message.setGraphic(null);
+                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
+                message.showAndWait();
+                inputStage.toFront();
+                inputTextField.clear();
+                return;
             }
-        } catch (IOException | ClassNotFoundException ex) {
-            showError("An error occurred while processing: " + ex.getMessage());
-        }
+
+            boolean result = admin.addUser(userInput);
+            if(!result){
+                Alert message = new Alert(AlertType.INFORMATION);
+                message.initOwner(primaryStage);
+                message.setTitle("User Creation Error");
+                message.setHeaderText("Invalid Username");
+                message.setContentText("This username is taken, choose a different name.");
+                message.setGraphic(null);
+                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
+                message.showAndWait();
+                inputStage.toFront();
+                inputTextField.clear();
+                return;
+            }
+            inputStage.close(); // Close the input window
+            try {
+                Admin.writeAdmin(admin);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            userList.setItems(FXCollections.observableArrayList(admin.getUsers()));
+            userList.getSelectionModel().select(0);
+        });
+
+        // Layout for the input window
+        VBox inputLayout = new VBox(10);
+        inputLayout.setPadding(new Insets(20));
+        inputLayout.getChildren().addAll(inputTextField, submitButton);
+
+        // Create the input scene
+        Scene inputScene = new Scene(inputLayout, 300, 100);
+
+        // Set the input scene and show the input window
+        inputStage.setScene(inputScene);
+        inputStage.setTitle("Create User");
+        inputStage.show();
     }
 
     @FXML
-    public void handleDeleteUserButton(ActionEvent actionEvent) {
-        String username = userField.getText().trim();
-        if (admin.removeUser(username)) {
-            try {
-                Admin.writeAdmin(admin); // Persist changes
-                updateUsersDisplay(); // Refresh the displayed list of users
-                showMessage("User deleted successfully.");
-            } catch (IOException ioException) {
-                showError("Persistence Error: Could not save the admin data.");
-            }
-        } else {
-            showError("User Deletion Error: User not found.");
+    public void handleDeleteUserButton(ActionEvent actionEvent) throws IOException {
+        User user = userList.getSelectionModel().getSelectedItem();
+        if(user.getUserName().equals("stock") && user.getUserName().equals("stock")){
+            Alert message = new Alert(AlertType.INFORMATION);
+            message.initOwner(primaryStage);
+            message.setTitle("Deletion Error");
+            message.setHeaderText("User Cannot Be Deleted");
+            message.setContentText("This is the stock user, it cannot be deleted.");
+            message.setGraphic(null);
+            message.getDialogPane().getStylesheets().add("/view/loginPane.css");
+            message.showAndWait();
+            return;
         }
+
+        deleteUser(user);
+        Admin.writeAdmin(admin);
+        userList.setItems(FXCollections.observableArrayList(users));
+        userList.getSelectionModel().select(0);
     }
 
     @FXML
@@ -171,5 +215,34 @@ public class AdminController{
     }
 
     public void handleConfirmButton(ActionEvent actionEvent) {
+        String target = userField.getText().trim().toLowerCase();
+        ArrayList<User> filtered = new ArrayList<>();
+
+        if(users.isEmpty()){
+            Alert message = new Alert(AlertType.INFORMATION);
+            message.initOwner(primaryStage);
+            message.setTitle("Search Error");
+            message.setHeaderText("User Not Found");
+            message.setContentText(STR."Cannot search for user: " + userField.getText() + ", because they do not exist.");
+            message.setGraphic(null);
+            message.getDialogPane().getStylesheets().add("/view/loginPane.css");
+            message.showAndWait();
+            return;
+        }
+        for(User i : users){
+            if(i.userName.contains(target)){
+                filtered.add(i);
+            }
+        }
+        userList.setItems(FXCollections.observableArrayList(filtered));
+        userList.getSelectionModel().select(0);
+    }
+    public void deleteUser(User user){
+        users.remove(user);
+    }
+
+    public void cancelSearchButton(ActionEvent actionEvent) {
+        userList.setItems(FXCollections.observableArrayList(users));
+        userList.getSelectionModel().select(0);
     }
 }
