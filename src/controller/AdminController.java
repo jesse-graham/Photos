@@ -1,4 +1,5 @@
 package controller;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,11 +130,9 @@ public class AdminController{
     }
 
 
-    }
-
     @FXML
     public void handleListUsersButton(ActionEvent actionEvent) {
-    updateUsersDisplay();
+        updateUsersDisplay();
 
     }
 
@@ -147,6 +146,7 @@ public class AdminController{
 
     }
 
-    public void handleLogoutButton(ActionEvent actionEvent) {
-    }
 }
+
+
+

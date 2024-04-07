@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 
+
 /**
  * Photo Album Class - defines attributes of the Photo Album
  */
@@ -35,8 +36,8 @@ public class PhotoAlbumApplication extends Application {
             Album stockAlbum = new Album("stock");
             addStockPhotos(stockAlbum);
             stock.addAlbum(stockAlbum);
-            admin.users.add(stock);
-            admin.users.add(new User("testUser"));
+            admin.getUsers().add(stock);
+            admin.getUsers().add(new User("testUser"));
         }
 
     }

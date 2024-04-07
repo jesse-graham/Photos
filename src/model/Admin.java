@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 public class Admin implements Serializable{
     public String userName = "admin";
 
-    ArrayList<User> users = new ArrayList<>();
+    public ArrayList<User> users = new ArrayList<>();
 
     public static final String storeDir = "Data";
 
