@@ -47,7 +47,10 @@ public class UserController {
 
     Scene prev;
 
+    Scene userScene;
+
     public void start(Stage primaryStage, ArrayList<User> users, Scene prev, LoginController lpg, Admin admin, User user) {
+        userScene = primaryStage.getScene();
         this.user = user;
         this.users = users;
         this.primaryStage = primaryStage;
@@ -56,7 +59,7 @@ public class UserController {
         this.admin = admin;
         albumList.setItems(FXCollections.observableArrayList(user.getAlbums()));
         albumList.getSelectionModel().select(0);
-        Username.setText(STR."User Dashboard For - \{user.getUserName().toUpperCase()}");
+        Username.setText(STR."User Dashboard For - \{user.getUserName()}");
     }
 
     public void logOutButton(ActionEvent actionEvent) throws IOException {
@@ -171,6 +174,20 @@ public class UserController {
     }
 
     public void openButton(ActionEvent actionEvent) {
+        try{
+            FXMLLoader loader= new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/albumView.fxml"));
+            AnchorPane root = (AnchorPane)loader.load();
+            AlbumViewController apg = loader.getController();
+
+            apg.start(primaryStage,user, userScene,this, albumList.getSelectionModel().getSelectedItem(), admin);
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            root.requestFocus();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void cancelSearchButton(ActionEvent actionEvent) {

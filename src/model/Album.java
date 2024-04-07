@@ -53,9 +53,9 @@ public class Album implements Serializable{
         }
     }
 
-    public boolean addPhoto(File file){
+    public boolean addPhoto(File file, boolean isStock){
         if(photos.isEmpty()){
-            photos.add(new Photo(file, this));
+            photos.add(new Photo(file, this, isStock));
             updateOldestandNewest();
             return true;
         } else {
@@ -64,7 +64,7 @@ public class Album implements Serializable{
                     return false;
                 }
             }
-            photos.add(new Photo(file, this));
+            photos.add(new Photo(file, this, isStock));
             updateOldestandNewest();
             return true;
         }

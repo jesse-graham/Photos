@@ -42,11 +42,15 @@ public class PhotoAlbumApplication extends Application {
     }
 
     public void addStockPhotos(Album album){
-        album.addPhoto(new File("Data/StockPhotos/caspar-camille-rubin-89xuP-XmyrA-unsplash.jpg"));
-        album.addPhoto(new File("Data/StockPhotos/muhammad-awan-Jwby0ysbCV4-unsplash.jpg"));
-        album.addPhoto(new File("Data/StockPhotos/rafay-ansari-4dzcgZxGYQA-unsplash.jpg"));
-        album.addPhoto(new File("Data/StockPhotos/sujith-r-xWw4BJmfB5Y-unsplash.jpg"));
-        album.addPhoto(new File("Data/StockPhotos/tim-schmidbauer-TE_lOmkKq04-unsplash.jpg"));
+        album.addPhoto(new File("Data/StockPhotos/caspar-camille-rubin-89xuP-XmyrA-unsplash.jpg"), true);
+        album.addPhoto(new File("Data/StockPhotos/muhammad-awan-Jwby0ysbCV4-unsplash.jpg"), true);
+        album.addPhoto(new File("Data/StockPhotos/rafay-ansari-4dzcgZxGYQA-unsplash.jpg"), true);
+        album.addPhoto(new File("Data/StockPhotos/sujith-r-xWw4BJmfB5Y-unsplash.jpg"), true);
+        album.addPhoto(new File("Data/StockPhotos/tim-schmidbauer-TE_lOmkKq04-unsplash.jpg"), true);
+
+        for(Photo i : album.photos){
+            i.caption = "stock photo" + i;
+        }
     }
 
     public void start(Stage mainStage) {
