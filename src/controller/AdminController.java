@@ -169,4 +169,7 @@ public class AdminController{
         alert.setHeaderText(null);
         alert.showAndWait();
     }
+
+    public void handleConfirmButton(ActionEvent actionEvent) {
+    }
 }

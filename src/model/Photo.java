@@ -14,6 +14,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.control.ContentDisplay;
 import javafx.geometry.Insets;
 import javafx.scene.control.OverrunStyle;
+import javafx.scene.input.MouseEvent;
+import javafx.event.EventHandler;
+
 
 public class Photo implements Serializable{
 
@@ -33,11 +36,19 @@ public class Photo implements Serializable{
 
     transient ImageView imageView;
 
+    public static String selected;
+
 
     public Photo(File file, Album album, boolean isStock){
         caption = "";
         photoPath = file.getPath();
         label = new Label();
+        label.setStyle("-fx-text-fill: black;");
+//        label.setOnMouseClicked(new EventHandler<MouseEvent>(){
+//            public void handle(MouseEvent mouseEvent){
+//                selected = photoPath;
+//            }
+//        });
         tags = new ArrayList<>();
         date = Calendar.getInstance();
         date.setTimeInMillis(file.lastModified());
@@ -79,6 +90,10 @@ public class Photo implements Serializable{
         return label;
     }
 
+    public Image getImage(){
+        return image;
+    }
+
     public void setPhotoThumbnail(){
         image = new Image("file:"+this.photoPath);
         imageView = new ImageView(image);
@@ -93,7 +108,6 @@ public class Photo implements Serializable{
         label.setTextAlignment(TextAlignment.CENTER);
         label.setContentDisplay(ContentDisplay.TOP);
         label.setId(this.photoPath);
-        label.setStyle("-fx-text-fill: white");
 
         label.setPadding(new Insets(5,6,5,6));
         label.setMaxSize(label.getWidth(), label.getHeight());

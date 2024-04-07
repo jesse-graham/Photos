@@ -49,8 +49,10 @@ public class PhotoAlbumApplication extends Application {
         album.addPhoto(new File("Data/StockPhotos/sujith-r-xWw4BJmfB5Y-unsplash.jpg"), true);
         album.addPhoto(new File("Data/StockPhotos/tim-schmidbauer-TE_lOmkKq04-unsplash.jpg"), true);
 
+        int c = 1;
         for(Photo i : album.photos){
-            i.caption = "stock photo" + i;
+            i.caption = "stock photo: " + c;
+            c++;
         }
     }
 

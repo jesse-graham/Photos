@@ -70,6 +70,10 @@ public class Album implements Serializable{
         }
     }
 
+    public Photo getPhoto(int i){
+        return photos.get(i);
+    }
+
     public ArrayList<Photo> getPhotos(){
         return photos;
     }
@@ -84,5 +88,9 @@ public class Album implements Serializable{
             String date = STR."\{new SimpleDateFormat("MM/dd/yyyy").format(oldest.getTime())} - \{new SimpleDateFormat("MM/dd/yyyy").format(newest.getTime())}";
             return name + date;
         }
+    }
+
+    public void addPhoto(Photo newPhoto) {
+        photos.add(newPhoto);
     }
 }
