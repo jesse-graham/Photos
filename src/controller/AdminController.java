@@ -5,18 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Admin;
+import model.Album;
 import model.User;
 
 import javax.swing.*;
@@ -63,13 +67,9 @@ public class AdminController{
      * Login Pane Controller
      */
     LoginController lpg;
-    private void updateUsersDisplay() {
-        tilePane.getChildren().clear(); // Clear the tile pane before adding new elements
-        for (User user : admin.getUsers()) {
-            Label userLabel = new Label(user.getUserName());
-            tilePane.getChildren().add(userLabel);
-        }
-    }
+
+
+
 
     /***
      * Selected -  Selected Album Name.
@@ -97,71 +97,76 @@ public class AdminController{
         primaryStage.setResizable(true);
     }
 
+
     @FXML
     public void handleLogoutButton(ActionEvent e) throws IOException {
+        primaryStage.setScene(prev); // Go back to the previous scene
+    }
+    public void handleCancelButton(ActionEvent e) throws IOException {
         primaryStage.setScene(prev); // Go back to the previous scene
     }
 
     @FXML
     public void handleAddButton(ActionEvent e) {
-        String username = userName.getText();
+        String username = userField.getText().trim();
+
         if (username.isEmpty()) {
-            showAlert("Error", "User creation error", "Username cannot be empty.");
+            showError("Username cannot be empty.");
             return;
         }
-        if (admin.addUser(username)) {
-            try {
-                Admin.writeAdmin(admin); // Persist changes
-                updateUsersDisplay(); // Update UI
-            } catch (IOException ioException) {
-                showAlert("Error", "Persistence Error", "Could not save the admin data.");
+
+        try {
+            Admin admin = Admin.readAdmin(); // Load the admin object
+
+            if (admin.addUser(username)) {
+                Admin.writeAdmin(admin); // Save the updated admin object
+                showMessage("User added successfully.");
+            } else {
+                showError("Username is already used.");
             }
-        } else {
-            showAlert("Error", "User Creation Error", "A user with this name already exists.");
+        } catch (IOException | ClassNotFoundException ex) {
+            showError("An error occurred while processing: " + ex.getMessage());
         }
     }
 
     @FXML
     public void handleDeleteUserButton(ActionEvent actionEvent) {
-        String username = userName.getText();
+        String username = userField.getText().trim();
         if (admin.removeUser(username)) {
             try {
                 Admin.writeAdmin(admin); // Persist changes
-                updateUsersDisplay(); // Update UI
+                updateUsersDisplay(); // Refresh the displayed list of users
+                showMessage("User deleted successfully.");
             } catch (IOException ioException) {
-                showAlert("Error", "Persistence Error", "Could not save the admin data.");
+                showError("Persistence Error: Could not save the admin data.");
             }
         } else {
-            showAlert("Error", "User Deletion Error", "User not found.");
+            showError("User Deletion Error: User not found.");
         }
     }
-
 
     @FXML
     public void handleListUsersButton(ActionEvent actionEvent) {
         updateUsersDisplay();
-
     }
 
-    @FXML
-    public void handleConfirmButton(ActionEvent actionEvent) {
-
+    private void updateUsersDisplay() {
+        tilePane.getChildren().clear(); // Clear the tile pane before adding new elements
+        for (User user : admin.getUsers()) {
+            Label userLabel = new Label(user.getUserName());
+            tilePane.getChildren().add(userLabel);
+        }
     }
 
-    @FXML
-    public void handleCancelButton(ActionEvent actionEvent) {
-
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, message);
+        alert.setHeaderText(null);
+        alert.showAndWait();
     }
-    private void showAlert(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
+
+    private void showMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, message);
+        alert.setHeaderText(null);
         alert.showAndWait();
     }
 }
-
-}
-
-
-
