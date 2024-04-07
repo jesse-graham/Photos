@@ -63,6 +63,13 @@ public class AdminController{
      * Login Pane Controller
      */
     LoginController lpg;
+    private void updateUsersDisplay() {
+        tilePane.getChildren().clear(); // Clear the tile pane before adding new elements
+        for (User user : admin.getUsers()) {
+            Label userLabel = new Label(user.getUserName());
+            tilePane.getChildren().add(userLabel);
+        }
+    }
 
     /***
      * Selected -  Selected Album Name.
@@ -145,6 +152,14 @@ public class AdminController{
     public void handleCancelButton(ActionEvent actionEvent) {
 
     }
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+}
 
 }
 
