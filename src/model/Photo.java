@@ -28,7 +28,7 @@ public class Photo implements Serializable{
 
     ArrayList<Tag> tags;
 
-    boolean isStock;
+    boolean isStock = false;
 
     transient Label label;
 
@@ -144,5 +144,8 @@ public class Photo implements Serializable{
         AlbumViewController.selected = this.photoPath;
         AlbumViewController.isSelected= true;
 
+    }
+    public boolean isStock(){
+        return isStock;
     }
 }

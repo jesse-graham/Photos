@@ -54,6 +54,7 @@ public class PhotoAlbumApplication extends Application {
             i.caption = "stock photo: " + c;
             c++;
         }
+        album.setStock();
     }
 
     public void start(Stage mainStage) {

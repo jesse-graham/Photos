@@ -63,7 +63,6 @@ public class LoginController {
                 message.setHeaderText("Cannot Login");
                 message.setContentText("Username is incorrect, enter a valid username.");
                 message.setGraphic(null);
-                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
             }
         }

@@ -15,6 +15,8 @@ public class Album implements Serializable{
 
     Calendar newest = null;
 
+    boolean isStock = false;
+
     ArrayList<Photo> photos;
 
     public Album(String name){
@@ -65,6 +67,7 @@ public class Album implements Serializable{
                 }
             }
             photos.add(new Photo(file, this, isStock));
+            numPhotos = photos.size();
             updateOldestandNewest();
             return true;
         }
@@ -90,7 +93,41 @@ public class Album implements Serializable{
         }
     }
 
-    public void addPhoto(Photo newPhoto) {
-        photos.add(newPhoto);
+    public boolean addPhoto(Photo newPhoto) {
+        if(photos.isEmpty()){
+            photos.add(newPhoto);
+            updateOldestandNewest();
+            return true;
+        } else {
+            for(Photo i : photos){
+                if(i.getPath().equals(newPhoto.getPath())){
+                    return false;
+                }
+            }
+            photos.add(newPhoto);
+            numPhotos = photos.size();
+            updateOldestandNewest();
+            return true;
+        }
+    }
+
+    public void removePhoto(Photo photo){
+        int index = 0;
+        for(Photo i :  photos){
+            if(i.getPath().equals(photo.getPath())){
+                break;
+            }
+            index++;
+        }
+        photos.remove(index);
+        numPhotos = photos.size();
+        updateOldestandNewest();
+    }
+
+    public boolean isStock() {
+        return isStock;
+    }
+    public void setStock(){
+        isStock = true;
     }
 }

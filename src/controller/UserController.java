@@ -64,9 +64,15 @@ public class UserController {
 
     public void logOutButton(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
-        primaryStage.setScene(prev);
-        primaryStage.centerOnScreen();
-        primaryStage.setResizable(false);
+        FXMLLoader loader= new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/login.fxml"));
+        AnchorPane root = (AnchorPane)loader.load();
+        LoginController apg = loader.getController();
+
+        apg.start(primaryStage,admin.users,admin);
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        root.requestFocus();
     }
 
     public void searchButton(ActionEvent actionEvent) {
@@ -81,7 +87,6 @@ public class UserController {
             message.setHeaderText("Album Not Found");
             message.setContentText(STR."Cannot search for album \{'"'}\{albumTextField.getText()}\{'"'}, because \{user.getUserName()} has no albums.");
             message.setGraphic(null);
-            message.getDialogPane().getStylesheets().add("/view/loginPane.css");
             message.showAndWait();
             return;
         }
@@ -113,7 +118,6 @@ public class UserController {
                 message.setHeaderText("Invalid Album Name");
                 message.setContentText("Enter album name");
                 message.setGraphic(null);
-                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
                 inputStage.toFront();
                 inputTextField.clear();
@@ -128,7 +132,6 @@ public class UserController {
                 message.setHeaderText("Invalid Album Name");
                 message.setContentText("This album name is taken, choose a different name.");
                 message.setGraphic(null);
-                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
                 inputStage.toFront();
                 inputTextField.clear();
@@ -155,14 +158,13 @@ public class UserController {
 
     public void deleteAlbumButton(ActionEvent actionEvent) throws IOException {
         Album album = albumList.getSelectionModel().getSelectedItem();
-        if(album.getAlbumName().equals("stock") && user.getUserName().equals("stock")){
+        if(album.isStock() && user.getUserName().equals("stock")){
             Alert message = new Alert(AlertType.INFORMATION);
             message.initOwner(primaryStage);
             message.setTitle("Deletion Error");
             message.setHeaderText("Album Cannot Be Deleted");
             message.setContentText("This is the stock album, it cannot be deleted.");
             message.setGraphic(null);
-            message.getDialogPane().getStylesheets().add("/view/loginPane.css");
             message.showAndWait();
             return;
         }
@@ -180,7 +182,7 @@ public class UserController {
             AnchorPane root = (AnchorPane)loader.load();
             AlbumViewController apg = loader.getController();
 
-            apg.start(primaryStage,user, userScene,this, albumList.getSelectionModel().getSelectedItem(), admin);
+            apg.start(primaryStage,user, primaryStage.getScene(),this, albumList.getSelectionModel().getSelectedItem(), admin);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             root.requestFocus();
@@ -215,7 +217,6 @@ public class UserController {
                 message.setHeaderText("Invalid Album Name");
                 message.setContentText("Enter a name");
                 message.setGraphic(null);
-                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
                 inputStage.toFront();
                 inputTextField.clear();
@@ -229,7 +230,6 @@ public class UserController {
                 message.setHeaderText("Invalid Album Selected");
                 message.setContentText("This is the stock users stock album, it cannot be renamed.");
                 message.setGraphic(null);
-                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
                 inputStage.toFront();
                 inputTextField.clear();
@@ -244,7 +244,6 @@ public class UserController {
                 message.setHeaderText("Invalid Album Name");
                 message.setContentText("This album name is taken, choose a different name.");
                 message.setGraphic(null);
-                message.getDialogPane().getStylesheets().add("/view/loginPane.css");
                 message.showAndWait();
                 inputStage.toFront();
                 inputTextField.clear();

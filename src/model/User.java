@@ -54,4 +54,13 @@ public class User implements Serializable{
     public String toString(){
         return userName;
     }
+
+    public Album getAlbum(String albumName){
+        for(Album i : albums){
+            if(i.getAlbumName().equals(albumName)){
+                return i;
+            }
+        }
+        return null;
+    }
 }

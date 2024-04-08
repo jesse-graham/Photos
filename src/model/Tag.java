@@ -47,4 +47,32 @@ public class Tag implements Serializable{
         return tagName;
     }
 
+    public Boolean addTag(String name){
+        for(String i : tagValues){
+            if(i.equalsIgnoreCase(name)){
+                return false;
+            }
+        }
+        if(tagValues.isEmpty()){
+            tagValues.add(name);
+            return true;
+        }
+        else{
+            for(int i = 0;  i < tagValues.size(); i ++){
+                if(tagValues.get(i).compareToIgnoreCase(name) > 0 ){
+                    tagValues.add(i,name);
+                    return true;
+                }
+                else if(tagValues.size()-1 == i && tagValues.get(i).compareToIgnoreCase(name) < 0){
+                    tagValues.add(name);
+                    return true;
+                }
+            }
+        }
+        return true;
+
+
+
+    }
+
 }

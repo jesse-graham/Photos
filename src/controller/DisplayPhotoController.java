@@ -2,6 +2,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import model.Admin;
@@ -17,6 +19,7 @@ import model.Photo;
 import model.User;
 
 import java.awt.*;
+import java.io.IOException;
 
 public class DisplayPhotoController {
     @FXML
@@ -73,8 +76,6 @@ public class DisplayPhotoController {
         if(photo.getImage() != null){
             imageView.setImage(photo.getImage());
             imageView.setPreserveRatio(true);
-//            imageView.fitHeightProperty().bind(imageField.heightProperty());
-//            imageView.fitWidthProperty().bind(imageField.widthProperty());
         }
         TreeItem<String> dumb = new TreeItem<String>("dumb");
         dumb.setExpanded(true);
@@ -91,7 +92,21 @@ public class DisplayPhotoController {
 
 
     }
-    public void returnToPrev(ActionEvent actionEvent) {
+    public void returnToPrev(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader= new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/albumView.fxml"));
+        AnchorPane root = (AnchorPane)loader.load();
+        AlbumViewController apg = loader.getController();
 
+        FXMLLoader loader2 = new FXMLLoader();
+        loader2.setLocation(getClass().getResource("/view/user.fxml"));
+        AnchorPane root2 = (AnchorPane)loader2.load();
+        UserController apg2 = loader2.getController();
+        Scene userScene = new Scene(root2);
+
+        apg.start(primaryStage, currentUser, userScene, apg2, album, admin);
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        root.requestFocus();
     }
 }
