@@ -16,34 +16,95 @@ import javafx.stage.Stage;
 import model.Admin;
 import model.User;
 
-/**
+/** Admin controller controls the admin fxml file and implements various functions relating to admin
  * @author Jesse Graham | Arsal Shaikh
  * */
 
 public class AdminController{
+    /*
 
+    confirmButton - confirms users input to apply
+    createUserButton - allows user to create additional user
+    deleteUserButton - allows user to delete another user
+    logOutButton - allows user to log out of application
+    */
     @FXML
     Button confirmButton, createUserButton, deleteUserButton, logOutButton;
+
+    /*
+
+    userList - contains list of users
+    */
 
     @FXML
     ListView<User> userList;
 
+    /*
+
+    userField - space to input username
+    */
+
     @FXML
     TextField userField;
 
+    /*
+
+   admin - contains admin
+    */
+
+
     Admin admin;
+    /*
+
+    primaryStage - prompted space for function
+    */
 
     Stage primaryStage;
+    /*
+
+    users - references list of users
+    */
+
 
     public static ArrayList<User> users;
 
+    /*
+
+    prev - prompts previous stage
+    */
+
     Scene prev;
+
+    /*
+
+    lpg - controllers login
+    */
 
     LoginController lpg;
 
+    /*
+
+    selected - points to what was selected
+    */
+
     public static String selected;
 
+    /*
+
+    isSelected - boolean value to note selected or not
+    */
+
     public static Boolean isSelected = false;
+
+    /**
+
+     Start initializes the album pane controllers
+     @param primaryStage Stage of the previous scene
+     @param user list of users
+     @param prev prev scene
+     @param lpg login pane controller
+     @param admin - admin object
+     */
 
     public void start(Stage primaryStage, ArrayList<User> user, Scene prev, LoginController lpg, Admin admin) {
         this.primaryStage = primaryStage;
@@ -57,6 +118,12 @@ public class AdminController{
         userList.getSelectionModel().select(0);
         primaryStage.setResizable(true);
     }
+    /**
+
+     Logs user out of application
+     @param e takes mouse click event
+
+     */
 
 
     @FXML
@@ -64,6 +131,12 @@ public class AdminController{
         Admin.writeAdmin(admin);
         primaryStage.setScene(prev); // Go back to the previous scene
     }
+    /**
+
+     prompts user for additional user
+     @param e takes mouse click event
+
+     */
 
     @FXML
     public void handleAddButton(ActionEvent e) {
@@ -127,6 +200,11 @@ public class AdminController{
         inputStage.setTitle("Create User");
         inputStage.show();
     }
+    /**
+
+     allows user to delete previously created user
+     @param actionEvent takes mouse click event
+     */
 
     @FXML
     public void handleDeleteUserButton(ActionEvent actionEvent) throws IOException {
@@ -147,6 +225,12 @@ public class AdminController{
         userList.setItems(FXCollections.observableArrayList(users));
         userList.getSelectionModel().select(0);
     }
+    /**
+
+     allows users newly created username for new user
+     @param actionEvent takes  mouse click event
+
+     */
 
     public void handleConfirmButton(ActionEvent actionEvent) {
         String target = userField.getText().trim().toLowerCase();
@@ -170,14 +254,33 @@ public class AdminController{
         userList.setItems(FXCollections.observableArrayList(filtered));
         userList.getSelectionModel().select(0);
     }
+    /**
+
+     removes user from saved users
+
+     @param user to remove passed in user
+
+     */
     public void deleteUser(User user){
         users.remove(user);
     }
+    /**
+
+     Cancels users search
+
+     @param actionEvent takes action from
+     */
 
     public void cancelSearchButton(ActionEvent actionEvent) {
         userList.setItems(FXCollections.observableArrayList(users));
         userList.getSelectionModel().select(0);
     }
+    /**
+
+     initiates user to quit from app
+
+     @param actionEvent - receives mouse click event
+     */
 
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
