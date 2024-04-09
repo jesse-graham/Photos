@@ -22,11 +22,12 @@ import model.User;
 import java.awt.*;
 import java.io.IOException;
 
-/**
+/** Displau photo controller controls the display window when it is the photos with the tags and caption
  * @author Jesse Graham | Arsal Shaikh
  * */
 
 public class DisplayPhotoController {
+
 
     @FXML
     private TreeView<String> tagsField;
@@ -41,18 +42,58 @@ public class DisplayPhotoController {
     private ImageView imageView;
 
     private User currentUser;
+    /*
+
+    primaryStage - contains primary scene of application
+    */
 
     Stage primaryStage;
 
+    /*
+
+    album - contains album
+    */
+
     Album album;
+    /*
+
+    admin - contains admin
+    */
 
     Admin admin;
+    /*
+
+    prev - contains previous scene
+    */
 
     Scene prev;
 
+    /*
+
+    avc - contains controller to album view
+    */
+
     AlbumViewController avc;
 
+    /*
+
+    photo - contains photo
+    */
+
     Photo photo;
+
+    /**
+
+     Start initializes the  display photo controllers
+     @param primaryStage Stage of the previous scene
+     @param currentUser user currently logged in
+     @param prev prev scene
+     @param avc  controller to album view
+     @param album - contains album
+     @param admin - admin object
+     @param photo - contains photo
+
+     */
 
     public void start(Stage primaryStage, User currentUser, Scene prev, AlbumViewController avc, Album album, Admin admin, Photo photo){
         this.primaryStage = primaryStage;
@@ -65,6 +106,11 @@ public class DisplayPhotoController {
         setWindow();
         primaryStage.setResizable(true);
     }
+    /**
+
+     sets window within stage for photo display
+
+     */
     public void setWindow(){
         captionField.setText(photo.getCaption());
         dateCapturedField.setText(STR."Date Captured: \{photo.getDate()}");
@@ -88,6 +134,12 @@ public class DisplayPhotoController {
 
 
     }
+    /**
+
+     returns user to previous scene
+     @param actionEvent - accepts click from user
+
+     */
     public void returnToPrev(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader= new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/albumView.fxml"));
@@ -105,6 +157,12 @@ public class DisplayPhotoController {
         primaryStage.setScene(scene);
         root.requestFocus();
     }
+    /**
+
+     Users quits application
+     @param actionEvent - accepts click from user
+
+     */
 
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);

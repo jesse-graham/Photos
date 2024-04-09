@@ -12,20 +12,46 @@ import java.io.File;
  * */
 
 public class Album implements Serializable{
+    /*
+     * serialVersionUID - The constant serial number.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
+
+    /*
+     * albumName - The name of the album
+     */
     String albumName;
 
+    /*
+     * numPhotos - The number of photos on the album.
+     */
     public int numPhotos;
 
+    /*
+     * oldest - The date of the oldest photo on the album.
+     */
     Calendar oldest = null;
 
+    /*
+     * newest - The date of the newest photo on the album.
+     */
     Calendar newest = null;
 
+    /*
+     * isStock - Sores weather or not the photo is a stock photo.
+     */
     boolean isStock = false;
 
+    /*
+     * photos - The list of all photos on the album.
+     */
    public ArrayList<Photo> photos;
 
+    /*
+     * Album - creates an album object.
+     * @param name
+     */
     public Album(String name){
         this.albumName = name;
         photos = new ArrayList<>();
@@ -33,16 +59,27 @@ public class Album implements Serializable{
         updateOldestandNewest();
     }
 
+    /*
+     * getAlbumName - gets the name of the album.
+     * @param name
+     */
     public String getAlbumName()
     {
         return albumName;
     }
 
+    /*
+     * setAlbum - sets the name of an album.
+     * @param name
+     */
     public void setAlbum(String name)
     {
         albumName = name;
     }
 
+    /*
+     * updateOldestandNewest - updates the dates of the newest and oldest photos on the album.
+     */
     public void updateOldestandNewest(){
         if(photos.isEmpty()){
             oldest = null;
@@ -62,6 +99,11 @@ public class Album implements Serializable{
         }
     }
 
+    /*
+     * addPhoto - adds a photo to the album using the input parameters.
+     * @param file
+     * @param isStock
+     */
     public boolean addPhoto(File file, boolean isStock){
         if(photos.isEmpty()){
             photos.add(new Photo(file, this, isStock));
@@ -81,14 +123,24 @@ public class Album implements Serializable{
         }
     }
 
+    /*
+     * getPhoto - gets the photo at the provided index.
+     * @param i
+     */
     public Photo getPhoto(int i){
         return photos.get(i);
     }
 
+    /*
+     * getPhotos - gets the list of photos on the album.
+     */
     public ArrayList<Photo> getPhotos(){
         return photos;
     }
 
+    /*
+     * toString - converts the album as a string.
+     */
     @Override
     public String toString() {
         String name = STR."\{albumName}     \{numPhotos} photos\n";
@@ -101,6 +153,10 @@ public class Album implements Serializable{
         }
     }
 
+    /*
+     * addPhoto - Adds the provided photo to the album.
+     * @param photo
+     */
     public boolean addPhoto(Photo newPhoto) {
         if(photos.isEmpty()){
             photos.add(newPhoto);
@@ -120,6 +176,10 @@ public class Album implements Serializable{
         }
     }
 
+    /*
+     * removePhoto - removes the provide photo from the album.
+     * @param photo
+     */
     public void removePhoto(Photo photo){
         int index = 0;
         for(Photo i :  photos){
@@ -133,13 +193,25 @@ public class Album implements Serializable{
         updateOldestandNewest();
     }
 
+    /*
+     * isStock - returns weather or not the album is stock.
+     */
     public boolean isStock() {
         return isStock;
     }
+
+    /*
+     * setStock - makes the album a stock album.
+     */
     public void setStock(){
         isStock = true;
     }
 
+    /*
+     * changeName - Changes the name of the album to the name provided
+     * @param newName
+     * @param albums
+     */
     public boolean changeName(String newName, ArrayList<Album> albums){
         for(Album i : albums){
             if(i.getAlbumName().equals(newName)){
@@ -150,6 +222,9 @@ public class Album implements Serializable{
         return true;
     }
 
+    /*
+     * updateNumPhotos - updates the number of photos to the number of photos in the photos list.
+     */
     public void updateNumPhotos(){
         numPhotos = photos.size();
     }

@@ -23,23 +23,52 @@ import model.Tag;
  * */
 
 public class tagEditorController {
-
+    /*
+     * tagType - Contains the tag type.
+     */
     @FXML TextField tagType;
 
+    /*
+     * tagValue - Contains the tag value.
+     */
     @FXML TextField tagValue;
 
+    /*
+     * treeView - Contains all the tags, with their corresponding tag values.
+     */
     @FXML TreeView<String>  treeView;
 
+    /*
+     * localStage - Contains the localStage.
+     */
     private Stage localStage;
 
+    /*
+     * photo - Contains the current photo that's being edited.
+     */
     Photo photo;
 
+    /*
+     * input - Contains the tag values that will be added to the photo.
+     */
     ArrayList<String> input;
 
+    /*
+     * temp - Contains the tags that will be added to the photo.
+     */
     ArrayList<Tag> temp;
 
+    /*
+     * admin - Contains admin object, which holds all the saved information about the app.
+     */
     Admin admin;
 
+    /*
+     * Initializes the tagEditor Controller
+     * @param localStage
+     * @param photo
+     * @param admin
+     */
     public void start(Stage localStage,  Photo photo, Admin admin) {
         this.localStage = localStage;
         this.photo = photo;
@@ -76,6 +105,9 @@ public class tagEditorController {
 
     }
 
+    /*
+     * delete - deletes the tag.
+     */
     public void delete(){
         if(treeView.getSelectionModel().getSelectedItem() == null){
             return;
@@ -112,6 +144,10 @@ public class tagEditorController {
 
     }
 
+    /*
+     * add - adds the created tag to the photo.
+     * @param actionEvent
+     */
     public void add(ActionEvent e){
         treeView.getSelectionModel().clearSelection();
         if(tagType.getText().trim().isEmpty() || tagValue.getText().trim().isEmpty()){
@@ -206,15 +242,27 @@ public class tagEditorController {
         tagValue.clear();
     }
 
+    /*
+     * ok - confirms the edits made.
+     * @param actionEvent
+     */
     public void ok(ActionEvent e){
         photo.setTags(temp);
         localStage.close();
     }
 
+    /*
+     * cancel - cancels the tag editing process.
+     * @param actionEvent
+     */
     public void cancel(ActionEvent e){
         localStage.close();
     }
 
+    /*
+     * quitApp - logs the user out of the application and terminates the application, preserving any edits made.
+     * @param actionEvent
+     */
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
         Platform.exit();

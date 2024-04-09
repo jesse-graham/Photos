@@ -26,32 +26,75 @@ import model.*;
  * */
 
 public class searchPhotosController {
-
+    /*
+     * from - The start date.
+     */
     @FXML DatePicker from;
 
+    /*
+     * to - The end date.
+     */
     @FXML DatePicker to;
 
+    /*
+     * tagType - The type of tage
+     */
     @FXML ComboBox<Tag> tagType;
 
+    /*
+     * tagValue - The value of the tag.
+     */
     @FXML ComboBox<String> tagValue;
 
+    /*
+     * tagArea - The area of the tag.
+     */
     @FXML TextArea tagArea;
 
+    /*
+     * localStage - The local stage.
+     */
     private Stage localStage;
 
+    /*
+     * currentUser - Contains the current user.
+     */
     User currentUser;
 
+    /*
+     * album - Contains the current album.
+     */
     ArrayList<Album> album;
 
+    /*
+     * primaryStage - Contains the primary stage.
+     */
     Stage primaryStage;
 
+    /*
+     * searchTag - contains the search tag.
+     */
     ArrayList<Tag> searchTag;
 
+    /*
+     * admin - Contains the admin object.
+     */
     private Admin admin;
 
+    /*
+     * avc - Contains the album view controller.
+     */
     AlbumViewController avc;
 
-
+    /*
+     * Initializes the search photos Controller
+     * @param primaryStage
+     * @param localStage
+     * @param avc
+     * @param a
+     * @param admin
+     * @param currentUser
+     */
     public void start(Stage primaryStage, Stage localStage, AlbumViewController avc, ArrayList<Album> a, Admin admin, User currentUser) {
         this.localStage=localStage;
         this.avc=avc;
@@ -106,6 +149,11 @@ public class searchPhotosController {
         tagValue.setVisible(false);
     }
 
+    /*
+     * indexTag - returns the index of the desired tag.
+     * @param type
+     * @param tags
+     */
     public int indexTag(String type, ArrayList<Tag> tags){
         for(int i = 0; i < tags.size(); i ++){
             if(tags.get(i).getTagName().equalsIgnoreCase(type)){
@@ -115,6 +163,10 @@ public class searchPhotosController {
         return -1;
     }
 
+    /*
+     * selectVal - selects tag.
+     * @param actionEvent
+     */
     public void selectVal()
     {
         if(tagType.getSelectionModel().getSelectedItem()!=null) {
@@ -123,6 +175,10 @@ public class searchPhotosController {
         }
     }
 
+    /*
+     * addTag - adds a tag.
+     * @param actionEvent
+     */
     public void addTag(ActionEvent e){
 
         if(tagType.getSelectionModel().getSelectedItem()==null)
@@ -198,6 +254,10 @@ public class searchPhotosController {
         tagValue.getSelectionModel().clearSelection();
     }
 
+    /*
+     * searchOk - searches.
+     * @param actionEvent
+     */
     public void searchOK(ActionEvent e) throws ParseException {
 
         Boolean hasTags = false;
@@ -342,6 +402,11 @@ public class searchPhotosController {
         localStage.close();
     }
 
+    /*
+     * isSameDay - returns if the photo is on the same day provided.
+     * @param currPhoto
+     * @param day
+     */
     public Boolean isSameDay(Photo currPhoto, Calendar day)
     {
         String date = new SimpleDateFormat("MM/dd/yyyy").format(day.getTime());
@@ -352,11 +417,18 @@ public class searchPhotosController {
         return false;
     }
 
+    /*
+     * searchCancel - cancels the search.
+     * @param actionEvent
+     */
     public void searchCancel(ActionEvent e){
         localStage.close();
     }
 
-
+    /*
+     * quitApp - logs user out and quits the app, saving user data.
+     * @param actionEvent
+     */
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
         Platform.exit();

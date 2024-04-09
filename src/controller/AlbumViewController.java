@@ -37,8 +37,22 @@ import javafx.scene.image.ImageView;
  * */
 
 public class AlbumViewController {
+
+    /*
+
+    albumName - contains name of album
+    */
     public Label albumName;
+
+    /*
+
+    scrollPane - contains place for scrolling
+    */
     public ScrollPane scrollPane;
+    /*
+
+    makealbumformsearchbutton - contains button to search for album
+    */
     @FXML
     public Button makealbumformsearchbutton;
 
@@ -49,25 +63,87 @@ public class AlbumViewController {
 
     @FXML private Photo selectedPhoto;
 
+    /*
+
+    photos - contains list of photos
+    */
+
     public static ArrayList<Photo> photos;
+
+    /*
+
+    currentUser - references user logged in
+    */
 
     User currentUser;
 
+    /*
+
+    primaryStage - contains primary scene of application
+    */
+
     Stage primaryStage;
+
+    /*
+
+    album - contains album
+    */
 
     Album album;
 
+    /*
+
+    admin - contains admin
+    */
+
     Admin admin;
+
+    /*
+
+    prev - references previous scene
+    */
 
     Scene prev;
 
+    /*
+
+    uc - references user controller
+    */
+
     UserController uc;
+
+    /*
+
+    selected - points to what was selected
+    */
 
     public static String selected;
 
+    /*
+
+    isSelected - boolean value to note selected or not
+    */
+
     public static Boolean isSelected = false;
 
+    /*
+
+    AlbumViewScene - contains album scene to view
+    */
+
     Scene AlbumViewScene;
+
+    /**
+
+     Start initializes the album view controllers
+     @param primaryStage Stage of the previous scene
+     @param currentUser user currently logged in
+     @param prev prev scene
+     @param uc User loggeed in controller
+     @param admin - admin object
+     @param fromSearch - contains boolean value if from with search or not
+
+     */
 
     public void start(Stage primaryStage, User currentUser, Scene prev, UserController uc, Album album, Admin admin, Boolean fromSearch){
         AlbumViewScene = primaryStage.getScene();
@@ -102,6 +178,13 @@ public class AlbumViewController {
         albumName.setText(STR."Album: \{album.getAlbumName()}");
     }
 
+    /**
+
+     initiates to display photo
+     @param actionEvent - accepts mouse click
+
+     */
+
     public void displayPhoto(ActionEvent actionEvent) {
         try{
             FXMLLoader loader= new FXMLLoader();
@@ -118,6 +201,12 @@ public class AlbumViewController {
             e.printStackTrace();
         }
     }
+    /**
+
+     initiates to add photo
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void addPhoto(ActionEvent actionEvent) {
         FileChooser filechooser = new FileChooser();
@@ -195,6 +284,13 @@ public class AlbumViewController {
             primaryStage.setResizable(true);
         }
     }
+    /**
+
+     initiates to display photo
+     @param temp - is temporary string to compare to check albums
+     @param file - refers to file with albums
+
+     */
     public Photo checkAlbums(String temp, File file){
         for(int k = 0; k < currentUser.getAlbums().size(); k++){
             for(int m = 0; m < currentUser.getAlbums().get(k).getPhotos().size(); m++){
@@ -205,6 +301,12 @@ public class AlbumViewController {
         }
         return null;
     }
+    /**
+
+     initiates to remove photo
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void removePhoto(ActionEvent actionEvent) {
 //        if(selectedPhoto.isStock()){
@@ -221,6 +323,12 @@ public class AlbumViewController {
         album.numPhotos = photos.size();
         restoreAlbumData();
     }
+    /**
+
+     initiates to move photo
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void movePhoto(ActionEvent actionEvent) {
         // Create a new stage for the input window
@@ -303,6 +411,12 @@ public class AlbumViewController {
         inputStage.setTitle("Move Photo");
         inputStage.show();
     }
+    /**
+
+     initiates to display editor for caption
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void displayCaptionEditior(ActionEvent actionEvent) {
         // Create a new stage for the input window
@@ -334,6 +448,12 @@ public class AlbumViewController {
         inputStage.setTitle("Edit Caption");
         inputStage.show();
     }
+    /**
+
+     initiates to display editor for tag
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void displayTagEditor(ActionEvent actionEvent) throws IOException {
         Stage stageAdd = new Stage();
@@ -355,6 +475,12 @@ public class AlbumViewController {
         stageAdd.showAndWait();
         primaryStage.setResizable(true);
     }
+    /**
+
+     initiates to display slideshow
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void displaySlideshowView(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -367,6 +493,12 @@ public class AlbumViewController {
         primaryStage.setScene(scene);
         root.requestFocus();
     }
+    /**
+
+     initiates to returns user to user screen
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void returnToUser(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader= new FXMLLoader();
@@ -385,6 +517,13 @@ public class AlbumViewController {
         primaryStage.setScene(scene);
         root.requestFocus();
     }
+    /**
+
+     initiates to create tile with photo
+     @param newPhoto  - used photo for tile
+
+     */
+
 
     private void createTile(Photo newPhoto) {
         AnchorPane anchTile = new AnchorPane();
@@ -429,6 +568,7 @@ public class AlbumViewController {
         tilePane.getChildren().add(anchTile);
     }
 
+
     private void selectPhoto(MouseEvent event, AnchorPane anchTile) {
         if (selPane != anchTile) {
             prevSelPane = selPane;
@@ -460,6 +600,13 @@ public class AlbumViewController {
         selPane = null;
         prevSelPane = null;
     }
+
+    /**
+
+     initiates to make album from search
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void makeAlbumFromSearch(ActionEvent actionEvent) {
         // Create a new stage for the input window
@@ -515,6 +662,12 @@ public class AlbumViewController {
         inputStage.setTitle("Enter a name for the album.");
         inputStage.show();
     }
+    /**
+
+     initiates to quit application
+     @param actionEvent - accepts mouse click
+
+     */
 
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);

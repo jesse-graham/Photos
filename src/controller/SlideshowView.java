@@ -23,27 +23,68 @@ import java.util.ArrayList;
  * */
 
 public class SlideshowView {
+    /*
+     * prevPhotoButton - Takes user to the previous photo.
+     */
     @FXML public Button prevPhotoButton;
+
+    /*
+     * nextPhotoButton - Takes user to the next photo.
+     */
     @FXML public Button nextPhotoButton;
 
+    /*
+     * imageView - Contains image of the current photo.
+     */
     @FXML public ImageView imageView;
 
+    /*
+     * anchorPane - Contains entire window.
+     */
     @FXML public AnchorPane anchorPane;
 
+    /*
+     * photos - Contains the list of all photos belonging to the current user.
+     */
     private ArrayList<Photo> photos;
 
+    /*
+     * currentUser - Contains the current user.
+     */
     private User currentUser;
 
+    /*
+     * primaryStage - Contains the primary stage.
+     */
     Stage primaryStage;
 
+    /*
+     * album - Contains the current album
+     */
     Album album;
 
+    /*
+     * admin - Contains the admin object.
+     */
     Admin admin;
 
+    /*
+     * currentPhoto - Contains the current photo.
+     */
     Photo currentPhoto;
 
+    /*
+     * currentIndex - Contains current index.
+     */
     int currentIndex;
 
+    /*
+     * Initializes the slideshow Controller
+     * @param primaryStage
+     * @param currentUser
+     * @param album
+     * @param admin
+     */
     public void start(Stage primaryStage, User currentUser, Album album, Admin admin){
         this.primaryStage = primaryStage;
         this.currentUser = currentUser;
@@ -65,6 +106,10 @@ public class SlideshowView {
         primaryStage.setResizable(true);
     }
 
+    /*
+     * returnToAlbumView - returns user to album view.
+     * @param actionEvent
+     */
     public void returnToAlbumView(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader= new FXMLLoader();
         loader.setLocation(getClass().getResource("/view/albumView.fxml"));
@@ -83,6 +128,10 @@ public class SlideshowView {
         root.requestFocus();
     }
 
+    /*
+     * previousPhoto - displays the previous photo.
+     * @param actionEvent
+     */
     public void previousPhoto(ActionEvent actionEvent) {
         currentIndex--;
         currentPhoto = album.getPhotos().get(currentIndex);
@@ -97,6 +146,10 @@ public class SlideshowView {
         }
     }
 
+    /*
+     * nextPhoto - displays the next photo.
+     * @param actionEvent
+     */
     public void nextPhoto(ActionEvent actionEvent) {
         currentIndex++;
         currentPhoto = album.getPhotos().get(currentIndex);
@@ -111,6 +164,10 @@ public class SlideshowView {
         }
     }
 
+    /*
+     * quitApp - logs the user out, saving their data.
+     * @param actionEvent
+     */
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
         Platform.exit();

@@ -20,32 +20,73 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 
 /**
+ * User Controller controls the user fxml file and implements various functions relating to user.
  * @author Jesse Graham | Arsal Shaikh
  * */
 
 public class UserController {
-
+    /*
+     * albumTextFiled - Contains the album text field.
+     */
     @FXML
     private TextField albumTextField;
 
+    /*
+     * Username - Contains the username of the user.
+     */
     @FXML
     private Label Username;
 
+    /*
+     * albumList - Contains the list of all the albums the user has.
+     */
     @FXML
     private ListView<Album> albumList;
+
+    /*
+     * users - Contains a list of all existing users.
+     */
     ArrayList<User> users;
+
+    /*
+     * user - Contains the current user.
+     */
     User user;
 
+    /*
+     * primaryStage - Contains the primaryStage.
+     */
     Stage primaryStage;
 
+    /*
+     * admin - Contains the admin object.
+     */
     Admin admin;
 
+    /*
+     * lpg - Contains the loginController.
+     */
     LoginController lpg;
 
+    /*
+     * prev - Contains the previous scene.
+     */
     Scene prev;
 
+    /*
+     * userScene - Contains the current scene.
+     */
     Scene userScene;
 
+    /*
+    * Initializes the User Controller
+    * @param primaryStage
+    * @param users
+    * @param prev
+    * @param lpg
+    * @param admin
+    * @param user
+    */
     public void start(Stage primaryStage, ArrayList<User> users, Scene prev, LoginController lpg, Admin admin, User user) {
         userScene = primaryStage.getScene();
         this.user = user;
@@ -59,6 +100,10 @@ public class UserController {
         Username.setText(STR."User Dashboard For - \{user.getUserName()}");
     }
 
+    /*
+    * logOutButton - logs the user out of the application and terminates the application, preserving any edits made.
+    * @param actionEvent
+    */
     public void logOutButton(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
         FXMLLoader loader= new FXMLLoader();
@@ -72,6 +117,10 @@ public class UserController {
         root.requestFocus();
     }
 
+    /*
+    * searchButton - Displays the user's search in the form of a list view.
+    * @param actionEvent
+    */
     public void searchButton(ActionEvent actionEvent) {
         String target = albumTextField.getText().trim().toLowerCase();
         ArrayList<Album> albums = user.getAlbums();
@@ -96,6 +145,10 @@ public class UserController {
         albumList.getSelectionModel().select(0);
     }
 
+    /*
+    * addAlbumButton - When the addAlbum button is clicked, this method is executed and the user is prompted to add an album.
+    * @param actionEvent
+    */
     public void addAlbumButton(ActionEvent actionEvent) {
         // Create a new stage for the input window
         Stage inputStage = new Stage();
@@ -153,6 +206,10 @@ public class UserController {
         inputStage.show();
     }
 
+    /*
+     * deleteAlbumButton - When the deleteAlbum button is pressed, this method is executed and the selected album is deleted.
+     * @param actionEvent
+     */
     public void deleteAlbumButton(ActionEvent actionEvent) throws IOException {
         Album album = albumList.getSelectionModel().getSelectedItem();
 //        if(album.isStock() && user.getUserName().equals("stock")){
@@ -172,6 +229,10 @@ public class UserController {
         albumList.getSelectionModel().select(0);
     }
 
+    /*
+     * openButton - When the open button is clicked, this method is executed and selected album is opened.
+     * @param actionEvent
+     */
     public void openButton(ActionEvent actionEvent) {
         try{
             FXMLLoader loader= new FXMLLoader();
@@ -189,11 +250,19 @@ public class UserController {
         }
     }
 
+    /*
+     * cancelSearchButton - When the cancelSearch button is clicked, this method is executed and the users search is canceled.
+     * @param actionEvent
+     */
     public void cancelSearchButton(ActionEvent actionEvent) {
         albumList.setItems(FXCollections.observableArrayList(user.getAlbums()));
         albumList.getSelectionModel().select(0);
     }
 
+    /*
+     * renameButton - When the rename button is clicked, this method is executed and the user is prompted rename the selected album.
+     * @param actionEvent
+     */
     public void renameButton(ActionEvent actionEvent) {
         Album album = albumList.getSelectionModel().getSelectedItem();
         // Create a new stage for the input window
@@ -265,6 +334,10 @@ public class UserController {
         inputStage.show();
     }
 
+    /*
+     * searchPhotosButton - When the searchPhotos button is clicked, this method is executed and the user search is processed.
+     * @param actionEvent
+     */
     public void searchPhotosButton(ActionEvent actionEvent) {
         if(user.getAlbums().isEmpty())
         {
@@ -306,6 +379,10 @@ public class UserController {
         }
     }
 
+    /*
+     * quitApp - When the quitApp button is clicked, this method is executed and Application is closed.
+     * @param actionEvent
+     */
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Admin.writeAdmin(admin);
         Platform.exit();

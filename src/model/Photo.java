@@ -23,24 +23,58 @@ import javafx.event.EventHandler;
  * */
 
 public class Photo implements Serializable{
+    /*
+     * serialVersionUID - The constant serial number.
+     */
     @Serial
     private static final long serialVersionUID = 1L;
+
+    /*
+     * photoPath - The file path to the photo.
+     */
     String photoPath;
 
+    /*
+     * date - The date of the photo.
+     */
     Calendar date;
 
+    /*
+     * caption - The photo's caption.
+     */
     String caption;
 
+    /*
+     * tags - The list of tags corresponding to the photo.
+     */
     ArrayList<Tag> tags;
 
+    /*
+     * isStock - Variable containing weather or not the photo is a stock one.
+     */
     boolean isStock = false;
 
+    /*
+     * label - The photo's label.
+     */
     transient Label label;
 
+    /*
+     * image - The image.
+     */
     transient Image image;
 
+    /*
+     * imageView - The imageView, which holds the image.
+     */
     transient ImageView imageView;
 
+    /*
+     * Album - creates a photo object.
+     * @param file
+     * @param album
+     * @param isStock
+     */
     public Photo(File file, Album album, boolean isStock){
         caption = "";
         photoPath = file.getPath();
@@ -55,42 +89,75 @@ public class Photo implements Serializable{
         this.isStock = isStock;
     }
 
+    /*
+     * getCal - gets the date.
+     */
     public Calendar getCal(){
         return date;
     }
 
+    /*
+     * getCaption - gets the caption of the photo.
+     */
     public String getCaption(){
         return caption;
     }
 
+    /*
+     * setCaption - sets the caption of the photo to the provided string.
+     * @param string
+     */
     public void setCaption(String string){
         caption = string;
     }
 
+    /*
+     * getPath - gets the path of the photo.
+     */
     public String getPath(){
         return photoPath;
     }
 
+    /*
+     * setPath - sets the path of the photo to the provided string.
+     * @param path
+     */
     public void setPath(String path){
         photoPath = path;
     }
 
+    /*
+     * getTags - gets the list of tags.
+     */
     public ArrayList<Tag> getTags(){
         return tags;
     }
 
+    /*
+     * setTags - sets the tags to provided tag.
+     * @param t
+     */
     public void setTags(ArrayList<Tag> t){
         this.tags = t;
     }
 
+    /*
+     * getLabel - gets the photo's label.
+     */
     public Label getLabel(){
         return label;
     }
 
+    /*
+     * getImage - gets the photo's image.
+     */
     public Image getImage(){
         return image;
     }
 
+    /*
+     * setPhotoThumbnail - sets up the label so that it contains the image and the caption corresponding to the photo.
+     */
     public void setPhotoThumbnail(){
         image = new Image(STR."file:\{this.photoPath}");
         imageView = new ImageView(image);
@@ -109,9 +176,11 @@ public class Photo implements Serializable{
         label.setPadding(new Insets(5,6,5,6));
         label.setMaxSize(label.getWidth(), label.getHeight());
         label.setTextOverrun(OverrunStyle.ELLIPSIS);
-        label.setOnMouseClicked(e -> selectImage());
     }
 
+    /*
+     * getDate - gets the date of the photo.
+     */
     public String getDate(){
         if(date == null){
             return "";
@@ -119,6 +188,9 @@ public class Photo implements Serializable{
         return new SimpleDateFormat("MM/dd/yyyy").format(date.getTime());
     }
 
+    /*
+     * getTime - gets the time of the photo.
+     */
     public String getTime(){
         if(date == null){
             return "";
@@ -126,22 +198,10 @@ public class Photo implements Serializable{
         return new SimpleDateFormat("hh:mm:ss aa").format(date.getTime());
     }
 
-    public void selectImage(){
-        for(int i = 0; i < AlbumViewController.photos.size(); i++){
-            if(AlbumViewController.photos.get(i).label.getStylesheets().size() == 2){
-                AlbumViewController.photos.get(i).label.getStylesheets().remove(1);
-                if(AlbumViewController.photos.get(i).photoPath.equalsIgnoreCase(this.photoPath)){
-                    AlbumViewController.photos.get(i).label.getStylesheets().add(getClass().getResource("/view/border.css").toExternalForm());
-                }
-                else{
-                    AlbumViewController.photos.get(i).label.getStylesheets().add(getClass().getResource("/view/emptyBorder.css").toExternalForm());
-                }
-            }
-        }
-        AlbumViewController.selected = this.photoPath;
-        AlbumViewController.isSelected= true;
-
-    }
+    /*
+     * inStock - returns weather or not the photo is stock.
+     * @param userName
+     */
     public boolean isStock(){
         return isStock;
     }

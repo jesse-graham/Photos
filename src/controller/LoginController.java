@@ -21,18 +21,38 @@ import model.Admin;
  * */
 
 public class LoginController {
-
+    /*
+     * UserNameField - The username text field.
+     */
     @FXML
     private TextField UserNameField;
 
+    /*
+     * users - The list of users.
+     */
     ArrayList<User> users;
 
+    /*
+     * primaryStage - The primary stage.
+     */
     Stage primaryStage;
 
+    /*
+     * admin - The admin object.
+     */
     Admin admin;
 
+    /*
+     * loginScene - The login scene.
+     */
     Scene loginScene;
 
+    /*
+     * Initializes the Login Controller
+     * @param primaryStage
+     * @param users
+     * @param admin
+     */
     public void start(Stage primaryStage, ArrayList<User> user, Admin admin) {
         this.primaryStage = primaryStage;
         this.users = user;
@@ -40,6 +60,10 @@ public class LoginController {
 
     }
 
+    /*
+     * login - logs in either the user or the admin.
+     * @param e
+     */
     public void login(ActionEvent e) {
        loginScene = primaryStage.getScene();
         String s = UserNameField.getText().trim().toLowerCase();
@@ -70,6 +94,9 @@ public class LoginController {
         }
     }
 
+    /*
+     * adminLogin - logs in as an admin.
+     */
     public void adminLogin() {
         try{
             FXMLLoader loader= new FXMLLoader();
@@ -86,6 +113,9 @@ public class LoginController {
         }
     }
 
+    /*
+     * indexTag - logs in as the provided user.
+     */
     public void userLogin(String name, ArrayList<Album> album, User user, int index){
         try{
             FXMLLoader loader= new FXMLLoader();
@@ -103,6 +133,10 @@ public class LoginController {
         }
     }
 
+    /*
+     * indexTag - logs the user out and quits the application, saving user data.
+     * @param actionEvent
+     */
     public void quitApp(ActionEvent actionEvent) throws IOException {
         Platform.exit();
     }
