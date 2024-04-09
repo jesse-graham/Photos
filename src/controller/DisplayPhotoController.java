@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,9 +22,11 @@ import model.User;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
+
 public class DisplayPhotoController {
-    @FXML
-    private HBox imageField;
 
     @FXML
     private TreeView<String> tagsField;
@@ -35,9 +38,6 @@ public class DisplayPhotoController {
     private TextField timeCapturedField, dateCapturedField;
 
     @FXML
-    private Button returnButton;
-
-    @FXML
     private ImageView imageView;
 
     private User currentUser;
@@ -47,10 +47,6 @@ public class DisplayPhotoController {
     Album album;
 
     Admin admin;
-
-    Scene previous;
-
-    LoginController lpg;
 
     Scene prev;
 
@@ -104,9 +100,14 @@ public class DisplayPhotoController {
         UserController apg2 = loader2.getController();
         Scene userScene = new Scene(root2);
 
-        apg.start(primaryStage, currentUser, userScene, apg2, album, admin);
+        apg.start(primaryStage, currentUser, userScene, apg2, album, admin,false);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         root.requestFocus();
+    }
+
+    public void quitApp(ActionEvent actionEvent) throws IOException {
+        Admin.writeAdmin(admin);
+        Platform.exit();
     }
 }

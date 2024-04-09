@@ -22,6 +22,7 @@
         <TextField fx:id="tagType" layoutX="28.0" layoutY="80.0" prefHeight="25.0" prefWidth="344.0" promptText="Tag Type, ex: Location" />
         <TreeView fx:id="treeView" layoutX="27.0" layoutY="219.0" prefHeight="131.0" prefWidth="344.0" />
         <TextField alignment="CENTER" editable="false" layoutX="27.0" layoutY="193.0" prefHeight="25.0" prefWidth="344.0" text="Tags" />
-        <TextField editable="false" layoutX="27.0" layoutY="350.0" prefHeight="25.0" prefWidth="344.0" text="* Right Click To Delete Tags" />
+        <TextField editable="false" layoutX="27.0" layoutY="350.0" prefHeight="25.0" prefWidth="344.0" text="Right click a tag to delete it." />
+      <Button layoutX="323.0" layoutY="20.0" mnemonicParsing="false" onAction="#quitApp" text="Quit" />
     </children>
 </AnchorPane>

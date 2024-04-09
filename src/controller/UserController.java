@@ -1,47 +1,44 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Album;
 import model.User;
 import model.Admin;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
+
 public class UserController {
-    @FXML
-    private Button logOutButton, searchAlbums, addAlbum, deleteButton, deleteAlbum, openAlbum, cancelSearch, renameAlbum, searchPhotos, createNewAlbumButton;
 
     @FXML
-    private TextField albumTextField, newAlbumName;
+    private TextField albumTextField;
 
     @FXML
     private Label Username;
 
     @FXML
     private ListView<Album> albumList;
-    private ArrayList<User> users;
-    private User user;
+    ArrayList<User> users;
+    User user;
 
     Stage primaryStage;
 
     Admin admin;
-
-    Scene previous;
 
     LoginController lpg;
 
@@ -111,7 +108,7 @@ public class UserController {
         Button submitButton = new Button("Create");
         submitButton.setOnAction(e -> {
             String userInput = inputTextField.getText();
-            if(userInput.trim().equals("")){
+            if(userInput.trim().isEmpty()){
                 Alert message = new Alert(AlertType.INFORMATION);
                 message.initOwner(primaryStage);
                 message.setTitle("Album Creation Error");
@@ -158,16 +155,16 @@ public class UserController {
 
     public void deleteAlbumButton(ActionEvent actionEvent) throws IOException {
         Album album = albumList.getSelectionModel().getSelectedItem();
-        if(album.isStock() && user.getUserName().equals("stock")){
-            Alert message = new Alert(AlertType.INFORMATION);
-            message.initOwner(primaryStage);
-            message.setTitle("Deletion Error");
-            message.setHeaderText("Album Cannot Be Deleted");
-            message.setContentText("This is the stock album, it cannot be deleted.");
-            message.setGraphic(null);
-            message.showAndWait();
-            return;
-        }
+//        if(album.isStock() && user.getUserName().equals("stock")){
+//            Alert message = new Alert(AlertType.INFORMATION);
+//            message.initOwner(primaryStage);
+//            message.setTitle("Deletion Error");
+//            message.setHeaderText("Album Cannot Be Deleted");
+//            message.setContentText("This is the stock album, it cannot be deleted.");
+//            message.setGraphic(null);
+//            message.showAndWait();
+//            return;
+//        }
 
         admin.getUser(user.userName).albums.remove(album);
         Admin.writeAdmin(admin);
@@ -182,7 +179,7 @@ public class UserController {
             AnchorPane root = (AnchorPane)loader.load();
             AlbumViewController apg = loader.getController();
 
-            apg.start(primaryStage,user, primaryStage.getScene(),this, albumList.getSelectionModel().getSelectedItem(), admin);
+            apg.start(primaryStage,user, primaryStage.getScene(),this, albumList.getSelectionModel().getSelectedItem(), admin, false);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             root.requestFocus();
@@ -210,7 +207,7 @@ public class UserController {
         Button submitButton = new Button("Change");
         submitButton.setOnAction(e -> {
             String userInput = inputTextField.getText();
-            if(userInput.trim().equals("")){
+            if(userInput.trim().isEmpty()){
                 Alert message = new Alert(AlertType.INFORMATION);
                 message.initOwner(primaryStage);
                 message.setTitle("Album Rename Error");
@@ -223,18 +220,18 @@ public class UserController {
                 return;
             }
 
-            if(album.getAlbumName().equals("stock") && user.getUserName().equals("stock")){
-                Alert message = new Alert(AlertType.INFORMATION);
-                message.initOwner(primaryStage);
-                message.setTitle("Album Rename Error");
-                message.setHeaderText("Invalid Album Selected");
-                message.setContentText("This is the stock users stock album, it cannot be renamed.");
-                message.setGraphic(null);
-                message.showAndWait();
-                inputStage.toFront();
-                inputTextField.clear();
-                return;
-            }
+//            if(album.getAlbumName().equals("stock") && user.getUserName().equals("stock")){
+//                Alert message = new Alert(AlertType.INFORMATION);
+//                message.initOwner(primaryStage);
+//                message.setTitle("Album Rename Error");
+//                message.setHeaderText("Invalid Album Selected");
+//                message.setContentText("This is the stock users stock album, it cannot be renamed.");
+//                message.setGraphic(null);
+//                message.showAndWait();
+//                inputStage.toFront();
+//                inputTextField.clear();
+//                return;
+//            }
 
             boolean result = user.renameAlbum(album, userInput);
             if(!result){
@@ -269,6 +266,48 @@ public class UserController {
     }
 
     public void searchPhotosButton(ActionEvent actionEvent) {
+        if(user.getAlbums().isEmpty())
+        {
+            Alert message = new Alert(AlertType.INFORMATION);
+            message.initOwner(primaryStage);
+            message.setTitle("Search Album");
+            message.setHeaderText("Cannot Search Album");
+            message.setContentText("There are no albums to Search");
+            message.setGraphic(null);
+            message.showAndWait();
+            return;
+        }
+        try{
+            Stage stageAdd = new Stage();
+            FXMLLoader load = new FXMLLoader();
+            load.setLocation(getClass().getResource("/view/searchPhotos.fxml"));
+            AnchorPane root = (AnchorPane)load.load();
+            searchPhotosController spc= load.getController();
+
+            FXMLLoader loader= new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/albumView.fxml"));
+            AnchorPane root2 = (AnchorPane)loader.load();
+            AlbumViewController avc = loader.getController();
+
+            spc.start(primaryStage, stageAdd,avc, user.getAlbums(), admin, user);
+            Scene add = new Scene(root);
+            stageAdd.setScene(add);
+            stageAdd.setTitle("Search Results");
+            stageAdd.setResizable(false);
+            stageAdd.initModality(Modality.WINDOW_MODAL);
+            stageAdd.initOwner(primaryStage);
+            root.requestFocus();
+            primaryStage.setResizable(false);
+            stageAdd.showAndWait();
+            primaryStage.setResizable(true);
+
+        }catch(Exception ee){
+            ee.printStackTrace();
+        }
     }
 
+    public void quitApp(ActionEvent actionEvent) throws IOException {
+        Admin.writeAdmin(admin);
+        Platform.exit();
+    }
 }

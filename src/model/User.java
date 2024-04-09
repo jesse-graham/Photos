@@ -1,9 +1,16 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
+
 public class User implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 1L;
     public String userName;
 
     public ArrayList<Album> albums;

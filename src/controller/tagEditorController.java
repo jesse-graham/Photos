@@ -1,7 +1,9 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -12,53 +14,43 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import model.Admin;
 import model.Photo;
 import model.Tag;
 
 /**
- * tag Controller controls the tag dialog FXML file and implements all the functionalities dealing with tag.
- * @author Daivik Sheth | Rohan Patel
- *
+ * @author Jesse Graham | Arsal Shaikh
  * */
+
 public class tagEditorController {
 
-    /** The tag type. */
     @FXML TextField tagType;
 
-    /** The tag value. */
     @FXML TextField tagValue;
 
-    /** The tree view. */
     @FXML TreeView<String>  treeView;
 
-    /** The local stage. */
     private Stage localStage;
 
-    /** The photo obj. */
     Photo photo;
 
-    /** The input. */
     ArrayList<String> input;
 
-    /** The temp tags */
     ArrayList<Tag> temp;
 
-    /**
-     * Start initializes the controller.
-     *
-     * @param localStage the previous scene
-     * @param photo the photo object
-     */
-    public void start(Stage localStage,  Photo photo) {
+    Admin admin;
+
+    public void start(Stage localStage,  Photo photo, Admin admin) {
         this.localStage = localStage;
         this.photo = photo;
-        input = new ArrayList<String>();
+        input = new ArrayList<>();
         temp = photo.getTags();
-        TreeItem<String> dumb = new TreeItem<String>("dumb");
+        this.admin = admin;
+        TreeItem<String> dumb = new TreeItem<>("dumb");
         dumb.setExpanded(true);
         treeView.setRoot(dumb);
         treeView.setShowRoot(false);
-        temp = new ArrayList<Tag>();
+        temp = new ArrayList<>();
         for(int i = 0; i < photo.getTags().size(); i++){
             Tag t = new Tag(photo.getTags().get(i).toString());
             for(int j = 0; j< photo.getTags().get(i).getTagValues().size(); j++){
@@ -67,10 +59,10 @@ public class tagEditorController {
             temp.add(t);
         }
 
-        for(int i = 0; i < temp.size(); i++){
-            TreeItem<String> tagT = new TreeItem<String>(temp.get(i).toString());
-            for(int j = 0; j < temp.get(i).getTagValues().size(); j++){
-                TreeItem<String> tagV = new TreeItem<String>(temp.get(i).getTagValues().get(j));
+        for (Tag tag : temp) {
+            TreeItem<String> tagT = new TreeItem<>(tag.toString());
+            for (int j = 0; j < tag.getTagValues().size(); j++) {
+                TreeItem<String> tagV = new TreeItem<>(tag.getTagValues().get(j));
                 tagT.getChildren().add(tagV);
             }
             dumb.getChildren().add(tagT);
@@ -98,11 +90,11 @@ public class tagEditorController {
         }
         boolean del = false;
         String parent = treeView.getSelectionModel().getSelectedItem().getParent().getValue();
-        for(int i = 0; i < temp.size(); i ++){
-            if(temp.get(i).getTagName().equalsIgnoreCase(parent)){
-                for(int j = 0; j < temp.get(i).getTagValues().size(); j++){
-                    if(temp.get(i).getTagValues().get(j).equalsIgnoreCase(s)){
-                        temp.get(i).getTagValues().remove(j);
+        for (Tag tag : temp) {
+            if (tag.getTagName().equalsIgnoreCase(parent)) {
+                for (int j = 0; j < tag.getTagValues().size(); j++) {
+                    if (tag.getTagValues().get(j).equalsIgnoreCase(s)) {
+                        tag.getTagValues().remove(j);
                         del = true;
                     }
                 }
@@ -127,9 +119,8 @@ public class tagEditorController {
             message2.initOwner(localStage);
             message2.setTitle("Tag Photo");
             message2.setHeaderText("Cannot Add Tag.");
-            message2.setContentText("You must enter both a tag type and tag value.");
+            message2.setContentText("Enter Both A Type And Value For The Tag");
             message2.setGraphic(null);
-            message2.getDialogPane().getStylesheets().add("/view/loginPane.css");
             message2.showAndWait();
             return;
         }
@@ -138,24 +129,12 @@ public class tagEditorController {
             message2.initOwner(localStage);
             message2.setTitle("Tag Photo");
             message2.setHeaderText("Cannot Add Tag.");
-            message2.setContentText("Tag Type cannot equal Tag Value.");
+            message2.setContentText("Tag Type Must Be Different From TagValue");
             message2.setGraphic(null);
-            message2.getDialogPane().getStylesheets().add("/view/loginPane.css");
             message2.showAndWait();
             return;
         }
 
-        if(tagType.getText().trim().length() > 30 || tagValue.getText().trim().length() > 30){
-            Alert message2 = new Alert(AlertType.INFORMATION);
-            message2.initOwner(localStage);
-            message2.setTitle("Tag Photo");
-            message2.setHeaderText("Cannot Add Tag.");
-            message2.setContentText("Tag Type and Tag Value must be less than 30 characters.");
-            message2.setGraphic(null);
-            message2.getDialogPane().getStylesheets().add("/view/loginPane.css");
-            message2.showAndWait();
-            return;
-        }
         int indexTag = -1;
         for(int i = 0; i < temp.size();i++){
             if(temp.get(i).getTagName().equalsIgnoreCase(tagType.getText().trim())){
@@ -167,11 +146,9 @@ public class tagEditorController {
                         message2.setHeaderText("Cannot Add Tag.");
                         message2.setContentText("This tag already exists for this photo.");
                         message2.setGraphic(null);
-                        message2.getDialogPane().getStylesheets().add("/view/loginPane.css");
                         message2.showAndWait();
                         return;
                     }
-
                 }
                 indexTag = i;
             }
@@ -197,8 +174,8 @@ public class tagEditorController {
                 }
             }
 
-            TreeItem<String> tagT = new TreeItem<String>(tagType.getText().trim());
-            TreeItem<String> tagV = new TreeItem<String>(tagValue.getText().trim());
+            TreeItem<String> tagT = new TreeItem<>(tagType.getText().trim());
+            TreeItem<String> tagV = new TreeItem<>(tagValue.getText().trim());
             tagT.getChildren().add(tagV);
             if(index == -1){
                 treeView.getRoot().getChildren().add(tagT);
@@ -213,7 +190,7 @@ public class tagEditorController {
         }
         else{
             temp.get(indexTag).addTag(tagValue.getText().trim());
-            TreeItem<String> tagV = new TreeItem<String>(tagValue.getText().trim());
+            TreeItem<String> tagV = new TreeItem<>(tagValue.getText().trim());
             for(int i = 0; i < treeView.getRoot().getChildren().size(); i ++){
                 if(treeView.getRoot().getChildren().get(i).getValue().equalsIgnoreCase(tagType.getText().trim())){
                     int index = temp.get(indexTag).getTagValues().indexOf(tagValue.getText().trim());
@@ -225,15 +202,8 @@ public class tagEditorController {
             treeView.scrollTo(treeView.getSelectionModel().getSelectedIndex());
 
         }
-
-
-
-
         tagType.clear();
         tagValue.clear();
-
-
-
     }
 
     public void ok(ActionEvent e){
@@ -245,4 +215,8 @@ public class tagEditorController {
         localStage.close();
     }
 
+    public void quitApp(ActionEvent actionEvent) throws IOException {
+        Admin.writeAdmin(admin);
+        Platform.exit();
+    }
 }

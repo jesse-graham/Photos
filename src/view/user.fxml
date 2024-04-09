@@ -24,6 +24,7 @@
          <Button fx:id="cancelSearch" layoutX="373.0" layoutY="68.0" mnemonicParsing="false" onAction="#cancelSearchButton" text="Cancel Search" />
          <Button fx:id="renameAlbum" layoutX="341.0" layoutY="126.0" mnemonicParsing="false" onAction="#renameButton" text="Rename" />
          <Button fx:id="searchPhotos" layoutX="436.0" layoutY="125.0" mnemonicParsing="false" onAction="#searchPhotosButton" text="Search Photos" />
+         <Button layoutX="457.0" layoutY="15.0" mnemonicParsing="false" onAction="#quitApp" text="Quit" />
       </children>
    </AnchorPane>
    <ListView fx:id="albumList" layoutX="-1.0" layoutY="172.0" prefHeight="491.0" prefWidth="606.0" />

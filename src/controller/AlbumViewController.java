@@ -1,6 +1,6 @@
 package controller;
 
-import javafx.collections.FXCollections;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert.AlertType;
 import java.util.List;
@@ -23,44 +23,35 @@ import javafx.stage.Modality;
 import model.User;
 import javafx.scene.effect.Glow;
 import javafx.scene.text.TextAlignment;
-import java.awt.image.BufferedImage;
 import javafx.scene.input.MouseEvent;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Optional;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-
-import javax.imageio.ImageIO;
-
-
-//import javax.swing.text.html.ImageView;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
-import java.io.File;
-
-import java.awt.*;
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
 
 public class AlbumViewController {
     public Label albumName;
     public ScrollPane scrollPane;
+    @FXML
+    public Button makealbumformsearchbutton;
 
     @FXML
     private TilePane tilePane;
 
     @FXML private AnchorPane selPane, prevSelPane;
+
     @FXML private Photo selectedPhoto;
 
     public static ArrayList<Photo> photos;
 
-    private User currentUser;
+    User currentUser;
 
     Stage primaryStage;
 
@@ -68,22 +59,17 @@ public class AlbumViewController {
 
     Admin admin;
 
-    Scene previous;
-
-    LoginController lpg;
-
     Scene prev;
 
     UserController uc;
+
     public static String selected;
 
     public static Boolean isSelected = false;
 
-    //public String selectedPhoto;
-
     Scene AlbumViewScene;
 
-    public void start(Stage primaryStage, User currentUser, Scene prev, UserController uc, Album album, Admin admin){
+    public void start(Stage primaryStage, User currentUser, Scene prev, UserController uc, Album album, Admin admin, Boolean fromSearch){
         AlbumViewScene = primaryStage.getScene();
         this.primaryStage = primaryStage;
         this.currentUser = currentUser;
@@ -94,6 +80,10 @@ public class AlbumViewController {
         photos = album.getPhotos();
         selected = null;
         isSelected = false;
+
+        if(!fromSearch){
+            makealbumformsearchbutton.setVisible(false);
+        }
 
         for(int k = 0; k < photos.size(); k++){
             File file = new File(photos.get(k).getPath());
@@ -109,7 +99,7 @@ public class AlbumViewController {
         }
         restoreAlbumData();
         primaryStage.setResizable(true);
-        albumName.setText("Album: " + album.getAlbumName());
+        albumName.setText(STR."Album: \{album.getAlbumName()}");
     }
 
     public void displayPhoto(ActionEvent actionEvent) {
@@ -137,45 +127,41 @@ public class AlbumViewController {
         if(files == null){
             return;
         }
-        ArrayList<File> filesThatExist = new ArrayList<File>();
-        for(int j = 0; j < files.size(); j++){
-            File file = files.get(j);
-            if(file != null){
-                Boolean add = true;
+        ArrayList<File> filesThatExist = new ArrayList<>();
+        for (File file : files) {
+            if (file != null) {
+                boolean add = true;
                 String stockPath = "data/StockPhotos";
-                for(int i = 0; i < photos.size(); i++){
-                    if(photos.get(i).getPath().equalsIgnoreCase(file.getAbsolutePath())){
+                for (Photo value : photos) {
+                    if (value.getPath().equalsIgnoreCase(file.getAbsolutePath())) {
                         filesThatExist.add(file);
                         add = false;
                         break;
                     }
                 }
-                //System.out.println(file.lastModified());
-                //check parent if in data and if it is make demo photo.
-                if(add){
+                if (add) {
                     Photo photo = null;
 
-                    if(file.getParentFile().getName().equals("StockPhotos")){
-                        if(file.getParentFile().getParentFile().getName().equals("data")){
-                            photo = checkAlbums(stockPath+file.getName(),file);
-                            if(photo == null){
-                                photo = new Photo(file,album, true);
+                    if (file.getParentFile().getName().equals("StockPhotos")) {
+                        if (file.getParentFile().getParentFile().getName().equals("data")) {
+                            photo = checkAlbums(stockPath + file.getName(), file);
+                            if (photo == null) {
+                                photo = new Photo(file, album, true);
                             }
                         }
-                    }
-                    else{
-                        photo = checkAlbums(file.getAbsolutePath(),file);
-                        if(photo == null){
+                    } else {
+                        photo = checkAlbums(file.getAbsolutePath(), file);
+                        if (photo == null) {
                             photo = new Photo(file, album, false);
                         }
 
                     }
 
-                    photos.add(0, photo);
-                    if(photo.getLabel() == null){
+                    photos.addFirst(photo);
+                    if (photo.getLabel() == null) {
                         photo.setPhotoThumbnail();
                     }
-                    tilePane.getChildren().add(0, photo.getLabel());
+                    tilePane.getChildren().addFirst(photo.getLabel());
                     album.updateOldestandNewest();
                     restoreAlbumData();
 
@@ -188,11 +174,11 @@ public class AlbumViewController {
             message.initOwner(primaryStage);
             message.setTitle("Add Photo");
             message.setHeaderText("Cannot Add Photo");
-            message.setContentText("Some selected photos may already exists in album. Could not add the following files:");
+            message.setContentText("Photo already exists in album. Could not add the following files:");
             message.setGraphic(null);
             String photoPaths = "";
-            for(int i = 0; i < filesThatExist.size(); i++){
-                photoPaths= photoPaths + filesThatExist.get(i).getAbsolutePath()+"\n";
+            for (File file : filesThatExist) {
+                photoPaths = STR."\{photoPaths}\{file.getAbsolutePath()}\n";
             }
 
             TextArea ta = new TextArea(photoPaths);
@@ -205,10 +191,8 @@ public class AlbumViewController {
 
             gp.add(ta, 0, 0);
             message.getDialogPane().setExpandableContent(gp);
-            message.getDialogPane().getStylesheets().add("/view/loginPane.css");
             message.showAndWait();
             primaryStage.setResizable(true);
-            return;
         }
     }
     public Photo checkAlbums(String temp, File file){
@@ -223,17 +207,18 @@ public class AlbumViewController {
     }
 
     public void removePhoto(ActionEvent actionEvent) {
-        if(selectedPhoto.isStock()){
-            Alert message = new Alert(Alert.AlertType.INFORMATION);
-            message.initOwner(primaryStage);
-            message.setTitle("Deletion Error");
-            message.setHeaderText("Photo Cannot Be Deleted");
-            message.setContentText("This is a stock Photo, it cannot be deleted.");
-            message.setGraphic(null);
-            message.showAndWait();
-            return;
-        }
+//        if(selectedPhoto.isStock()){
+//            Alert message = new Alert(Alert.AlertType.INFORMATION);
+//            message.initOwner(primaryStage);
+//            message.setTitle("Deletion Error");
+//            message.setHeaderText("Photo Cannot Be Deleted");
+//            message.setContentText("This is a stock Photo, it cannot be deleted.");
+//            message.setGraphic(null);
+//            message.showAndWait();
+//            return;
+//        }
         photos.remove(selectedPhoto);
+        album.numPhotos = photos.size();
         restoreAlbumData();
     }
 
@@ -249,7 +234,7 @@ public class AlbumViewController {
         javafx.scene.control.Button submitButton = new Button("Move");
         submitButton.setOnAction(e -> {
             String userInput = inputTextField.getText();
-            if(userInput.trim().equals("")){
+            if(userInput.trim().isEmpty()){
                 Alert message = new Alert(Alert.AlertType.INFORMATION);
                 message.initOwner(primaryStage);
                 message.setTitle("Error Moving Photo");
@@ -287,8 +272,8 @@ public class AlbumViewController {
                 Alert message = new Alert(Alert.AlertType.INFORMATION);
                 message.initOwner(primaryStage);
                 message.setTitle("Error Moving Photo");
-                message.setHeaderText("Photo Already Exists in Album: " + userInput);
-                message.setContentText("This photo already exists in the album: " + userInput + ". Dupllicates are not allowed, pick a differient album.");
+                message.setHeaderText(STR."Photo Already Exists in Album: \{userInput}");
+                message.setContentText(STR."This photo already exists in the album: \{userInput}. Dupllicates are not allowed, pick a differient album.");
                 message.setGraphic(null);
                 message.showAndWait();
                 inputStage.toFront();
@@ -357,7 +342,7 @@ public class AlbumViewController {
         load.setLocation(getClass().getResource("/view/tagEditor.fxml"));
         root = (AnchorPane)load.load();
         tagEditorController tpc= load.getController();
-        tpc.start(stageAdd, selectedPhoto);
+        tpc.start(stageAdd, selectedPhoto, admin);
         Scene add = new Scene(root);
         stageAdd.setScene(add);
         stageAdd.setTitle("Tag Photo");
@@ -369,10 +354,18 @@ public class AlbumViewController {
 
         stageAdd.showAndWait();
         primaryStage.setResizable(true);
-        deselect();
     }
 
-    public void displaySlideshowView(ActionEvent actionEvent) {
+    public void displaySlideshowView(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/slideshowView.fxml"));
+        AnchorPane root = (AnchorPane)loader.load();
+        SlideshowView apg = loader.getController();
+
+        apg.start(primaryStage, currentUser, album, admin);
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        root.requestFocus();
     }
 
     public void returnToUser(ActionEvent actionEvent) throws IOException {
@@ -393,45 +386,6 @@ public class AlbumViewController {
         root.requestFocus();
     }
 
-    public Photo getSelectedPhoto(String id){
-        for(Photo i : photos){
-            if(i.getPath().equals(id)){
-                return i;
-            }
-        }
-        return null;
-    }
-
-    public int getSelectedUser(){
-        if(!isSelected && selected == null){
-            return -1;
-        }
-        for(int i = 0; i < tilePane.getChildren().size(); i++){
-            if(tilePane.getChildren().get(i).getId().equalsIgnoreCase(selected)){
-                return i;
-            }
-        }
-        return -1;
-
-    }
-
-    public void deselect(){
-        int x = getSelectedUser();
-        if(x == -1){
-            selected = null;
-            isSelected = false;
-            return;
-        }
-        if(isSelected && x >= 0 && x < photos.size()){
-            if(((Label)tilePane.getChildren().get(x)).getStylesheets().size() == 2){
-                ((Label)tilePane.getChildren().get(x)).getStylesheets().remove(1);
-                ((Label)tilePane.getChildren().get(x)).getStylesheets().add(getClass().getResource("/view/emptyBorder.css").toExternalForm());
-            }
-        }
-        selected = null;
-        isSelected = false;
-    }
-
     private void createTile(Photo newPhoto) {
         AnchorPane anchTile = new AnchorPane();
         anchTile.setMinWidth(180);
@@ -446,17 +400,9 @@ public class AlbumViewController {
         imgView.setFitHeight(100);
 
         imgView.setPreserveRatio(true);
-        //imgView.setViewport(new Rectangle2D(150,150,0,0));
+        Image image = new Image(STR."file:\{newPhoto.getPath()}");
+        imgView.setImage(image);
 
-        BufferedImage bufferedImage;
-        try {
-            bufferedImage = ImageIO.read(new File(newPhoto.getPath()));
-            Image image = new Image("file:"+newPhoto.getPath());
-
-            imgView.setImage(image);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         Label lblName = new Label();
         lblName.setLayoutX(15);
@@ -499,19 +445,9 @@ public class AlbumViewController {
         } else {
             prevSelPane = selPane;
         }
-        ////System.out.println("Tile pressed " + tilePane.getChildren().indexOf(selPane));
 
         selectedPhoto = album.getPhoto(tilePane.getChildren().indexOf(selPane));
         event.consume();
-
-
-    }
-
-    private void addPhotoToTilePane(Photo newPhoto) {
-
-        createTile(newPhoto);
-        album.addPhoto(newPhoto);
-
     }
 
     private void restoreAlbumData() {
@@ -525,4 +461,63 @@ public class AlbumViewController {
         prevSelPane = null;
     }
 
+    public void makeAlbumFromSearch(ActionEvent actionEvent) {
+        // Create a new stage for the input window
+        Stage inputStage = new Stage();
+
+        // Create a text field for user input
+        javafx.scene.control.TextField inputTextField = new javafx.scene.control.TextField();
+        inputTextField.setPromptText("Type album name here");
+
+        // Create a button to submit the input
+        javafx.scene.control.Button submitButton = new Button("Confirm");
+        submitButton.setOnAction(e -> {
+            String userInput = inputTextField.getText();
+
+            if (userInput.isEmpty()){
+                Alert message = new Alert(AlertType.INFORMATION);
+                message.initOwner(primaryStage);
+                message.setTitle("Error Making Album");
+                message.setHeaderText("No Name Entered");
+                message.setContentText("Enter a name for the album.");
+                message.setGraphic(null);
+                message.showAndWait();
+                return;
+            }
+            boolean result = album.changeName(userInput, currentUser.getAlbums());
+            if(!result){
+                Alert message = new Alert(AlertType.INFORMATION);
+                message.initOwner(primaryStage);
+                message.setTitle("Error Making Album");
+                message.setHeaderText("Album Name Already Taken");
+                message.setContentText("This album name is taken, choose a different one.");
+                message.setGraphic(null);
+                message.showAndWait();
+                return;
+            }
+            album.updateOldestandNewest();
+            album.updateNumPhotos();
+            currentUser.addAlbum(album);
+            restoreAlbumData();
+            inputStage.close();
+        });
+
+        // Layout for the input window
+        VBox inputLayout = new VBox(10);
+        inputLayout.setPadding(new Insets(20));
+        inputLayout.getChildren().addAll(inputTextField, submitButton);
+
+        // Create the input scene
+        Scene inputScene = new Scene(inputLayout, 300, 100);
+
+        // Set the input scene and show the input window
+        inputStage.setScene(inputScene);
+        inputStage.setTitle("Enter a name for the album.");
+        inputStage.show();
+    }
+
+    public void quitApp(ActionEvent actionEvent) throws IOException {
+        Admin.writeAdmin(admin);
+        Platform.exit();
+    }
 }

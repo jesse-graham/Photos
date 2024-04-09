@@ -1,12 +1,19 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.io.File;
 
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
+
 public class Album implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 1L;
     String albumName;
 
     public int numPhotos;
@@ -17,7 +24,7 @@ public class Album implements Serializable{
 
     boolean isStock = false;
 
-    ArrayList<Photo> photos;
+   public ArrayList<Photo> photos;
 
     public Album(String name){
         this.albumName = name;
@@ -58,6 +65,7 @@ public class Album implements Serializable{
     public boolean addPhoto(File file, boolean isStock){
         if(photos.isEmpty()){
             photos.add(new Photo(file, this, isStock));
+            numPhotos = photos.size();
             updateOldestandNewest();
             return true;
         } else {
@@ -96,6 +104,7 @@ public class Album implements Serializable{
     public boolean addPhoto(Photo newPhoto) {
         if(photos.isEmpty()){
             photos.add(newPhoto);
+            numPhotos = photos.size();
             updateOldestandNewest();
             return true;
         } else {
@@ -129,5 +138,19 @@ public class Album implements Serializable{
     }
     public void setStock(){
         isStock = true;
+    }
+
+    public boolean changeName(String newName, ArrayList<Album> albums){
+        for(Album i : albums){
+            if(i.getAlbumName().equals(newName)){
+                return false;
+            }
+        }
+        albumName = newName;
+        return true;
+    }
+
+    public void updateNumPhotos(){
+        numPhotos = photos.size();
     }
 }

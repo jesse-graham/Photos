@@ -19,5 +19,6 @@
       <TextField fx:id="timeCapturedField" layoutX="399.0" layoutY="174.0" prefHeight="26.0" prefWidth="200.0" />
       <TextField fx:id="dateCapturedField" layoutX="400.0" layoutY="140.0" prefHeight="26.0" prefWidth="200.0" />
       <Button fx:id="returnButton" layoutX="532.0" layoutY="10.0" mnemonicParsing="false" onAction="#returnToPrev" text="Return" />
+      <Button layoutX="445.0" layoutY="13.0" mnemonicParsing="false" onAction="#quitApp" text="Quit" />
    </children>
 </AnchorPane>

@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,9 +18,13 @@ import javafx.scene.control.OverrunStyle;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
 
 public class Photo implements Serializable{
-
+    @Serial
+    private static final long serialVersionUID = 1L;
     String photoPath;
 
     Calendar date;
@@ -36,19 +41,11 @@ public class Photo implements Serializable{
 
     transient ImageView imageView;
 
-    public static String selected;
-
-
     public Photo(File file, Album album, boolean isStock){
         caption = "";
         photoPath = file.getPath();
         label = new Label();
         label.setStyle("-fx-text-fill: black;");
-//        label.setOnMouseClicked(new EventHandler<MouseEvent>(){
-//            public void handle(MouseEvent mouseEvent){
-//                selected = photoPath;
-//            }
-//        });
         tags = new ArrayList<>();
         date = Calendar.getInstance();
         date.setTimeInMillis(file.lastModified());
@@ -95,11 +92,11 @@ public class Photo implements Serializable{
     }
 
     public void setPhotoThumbnail(){
-        image = new Image("file:"+this.photoPath);
+        image = new Image(STR."file:\{this.photoPath}");
         imageView = new ImageView(image);
         imageView.setFitWidth(150);
         imageView.setFitHeight(100);
-        imageView.setId(this.caption + " ");
+        imageView.setId(STR."\{this.caption} ");
         if(label == null){
             label = new Label();
         }

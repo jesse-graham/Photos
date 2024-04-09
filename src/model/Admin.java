@@ -1,22 +1,21 @@
 package model;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
+/**
+ * @author Jesse Graham | Arsal Shaikh
+ * */
 
 public class Admin implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 1L;
     public String userName = "admin";
 
     public ArrayList<User> users = new ArrayList<>();
 
-    public static final String storeDir = "Data";
+    public static final String storeDir = "data";
 
-    /** The Constant storeFile. */
     public static final String storeFile = "data.dat";
 
     public ArrayList<User> getUsers(){
@@ -53,8 +52,7 @@ public class Admin implements Serializable{
     }
 
     public static void writeAdmin(Admin admin) throws IOException{
-        ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(storeDir+File.separator+storeFile));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(storeDir+File.separator+storeFile));
         oos.writeObject(admin);
         oos.close();
     }

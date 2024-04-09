@@ -1,30 +1,27 @@
-package model;
+package photos;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import controller.LoginController;
 import javafx.application.Application;
-import controller.AdminController;
-import controller.LoginController;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
-
+import model.Admin;
+import model.Album;
+import model.Photo;
+import model.User;
 
 /**
- * Photo Album Class - defines attributes of the Photo Album
- */
-public class PhotoAlbumApplication extends Application {
+ * @author Jesse Graham | Arsal Shaikh
+ * */
+
+public class photos extends Application {
 
     Admin admin;
-    /** The admin obj. */
+
     public void init() throws Exception{
         try{
             admin = Admin.readAdmin();
@@ -37,9 +34,7 @@ public class PhotoAlbumApplication extends Application {
             addStockPhotos(stockAlbum);
             stock.addAlbum(stockAlbum);
             admin.getUsers().add(stock);
-            admin.getUsers().add(new User("testUser"));
         }
-
     }
 
     public void addStockPhotos(Album album){
@@ -51,7 +46,7 @@ public class PhotoAlbumApplication extends Application {
 
         int c = 1;
         for(Photo i : album.photos){
-            i.caption = "stock photo: " + c;
+            i.setCaption(STR."stock photo: \{c}");
             c++;
         }
         album.setStock();

@@ -7,24 +7,30 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onDragDetected="#cancelSearchButton" prefHeight="440.0" prefWidth="593.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
-    <children>
-        <ListView fx:id="userList" layoutX="162.0" layoutY="136.0" prefHeight="245.0" prefWidth="269.0" />
-        <Label layoutX="14.0" layoutY="14.0" text="Admin Dashboard">
-            <font>
-                <Font name="System Bold" size="18.0" />
-            </font>
-        </Label>
-        <Button fx:id="logOutButton" layoutX="519.0" layoutY="401.0" mnemonicParsing="false" onAction="#handleLogoutButton" text="Sign Out" />
-        <Label layoutX="14.0" layoutY="54.0" text="Username:">
-            <font>
-                <Font name="System Bold" size="12.0" />
-            </font>
-        </Label>
-        <TextField fx:id="userField" layoutX="86.0" layoutY="50.0" prefHeight="25.0" prefWidth="167.0" />
-        <Button fx:id="createUserButton" layoutX="29.0" layoutY="136.0" mnemonicParsing="false" onAction="#handleAddButton" text="Create user" />
-        <Button fx:id="deleteUserButton" layoutX="29.0" layoutY="180.0" mnemonicParsing="false" onAction="#handleDeleteUserButton" text="Delete user" />
-        <Button fx:id="confirmButton" layoutX="262.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleConfirmButton" text="Search" />
-      <Button layoutX="329.0" layoutY="49.0" mnemonicParsing="false" onAction="#cancelSearchButton" text="Cancel Search" />
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+             prefHeight="440.0" prefWidth="593.0"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.AdminController">
+    <ListView fx:id="userList" layoutX="162.0" layoutY="136.0" prefHeight="245.0" prefWidth="269.0"/>
+    <Label layoutX="14.0" layoutY="14.0" text="Admin Dashboard">
+        <font>
+            <Font name="System Bold" size="18.0"/>
+        </font>
+    </Label>
+    <Button fx:id="logOutButton" layoutX="519.0" layoutY="401.0" mnemonicParsing="false" onAction="#handleLogoutButton"
+            text="Sign Out"/>
+    <Label layoutX="14.0" layoutY="54.0" text="Username:">
+        <font>
+            <Font name="System Bold" size="12.0"/>
+        </font>
+    </Label>
+    <TextField fx:id="userField" layoutX="86.0" layoutY="50.0" prefHeight="25.0" prefWidth="167.0"/>
+    <Button fx:id="createUserButton" layoutX="29.0" layoutY="136.0" mnemonicParsing="false" onAction="#handleAddButton"
+            text="Create user"/>
+    <Button fx:id="deleteUserButton" layoutX="29.0" layoutY="180.0" mnemonicParsing="false"
+            onAction="#handleDeleteUserButton" text="Delete user"/>
+    <Button fx:id="confirmButton" layoutX="262.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleConfirmButton"
+            text="Search"/>
+    <Button layoutX="329.0" layoutY="49.0" mnemonicParsing="false" onAction="#cancelSearchButton" text="Cancel Search"/>
+    <Button layoutX="524.0" layoutY="13.0" mnemonicParsing="false" onAction="#quitApp" text="Quit"/>
 </AnchorPane>
